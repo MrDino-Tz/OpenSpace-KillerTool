@@ -1,11 +1,12 @@
-import { SwapOutlined, CodeOutlined, CalculatorOutlined, RetweetOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { SwapOutlined, CodeOutlined, CalculatorOutlined, RetweetOutlined, AppstoreOutlined, FieldBinaryOutlined } from '@ant-design/icons';
 
 const icons = {
   SwapOutlined,
   CodeOutlined,
   CalculatorOutlined,
   RetweetOutlined,
-  AppstoreOutlined
+  AppstoreOutlined,
+  FieldBinaryOutlined
 };
 
 const conversionTools = {
@@ -43,6 +44,14 @@ const conversionTools = {
       type: 'item',
       url: '/tools/conversion/text-case-converters',
       icon: icons.RetweetOutlined,
+      breadcrumbs: false
+    },
+    {
+      id: 'text-to-binary',
+      title: 'Text to ASCII Binary',
+      type: 'item',
+      url: '/tools/conversion/text-to-binary',
+      icon: icons.FieldBinaryOutlined,
       breadcrumbs: false
     },
     {

@@ -16,6 +16,7 @@ const EncodersDecoders = Loadable(lazy(() => import('pages/tools/conversion/Enco
 const CodeConverters = Loadable(lazy(() => import('pages/tools/conversion/CodeConverters')));
 const MathLogic = Loadable(lazy(() => import('pages/tools/conversion/MathLogic')));
 const TextCaseConverters = Loadable(lazy(() => import('pages/tools/conversion/TextCaseConverters')));
+const TextToBinary = Loadable(lazy(() => import('pages/tools/conversion/TextToBinary')));
 const OtherConverters = Loadable(lazy(() => import('pages/tools/conversion/OtherConverters')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -71,6 +72,10 @@ const MainRoutes = {
             {
               path: 'text-case-converters',
               element: <TextCaseConverters />
+            },
+            {
+              path: 'text-to-binary',
+              element: <TextToBinary />
             },
             {
               path: 'other-converters',

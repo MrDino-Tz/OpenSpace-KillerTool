@@ -19,6 +19,7 @@ const tools = [
   { name: 'Code Converters', desc: 'JSON ↔ XML, YAML ↔ JSON, TOML ↔ YAML/JSON', path: '/tools/conversion/code-converters', category: 'Conversion Tools' },
   { name: 'Math / Logic', desc: 'Integer base converter, Math evaluator, Percentage calculator', path: '/tools/conversion/math-logic', category: 'Conversion Tools' },
   { name: 'Text & Case Converters', desc: 'Case converter, Text to ASCII binary...', path: '/tools/conversion/text-case-converters', category: 'Conversion Tools' },
+  { name: 'Text to ASCII Binary', desc: 'Convert text to binary and binary to text', path: '/tools/conversion/text-to-binary', category: 'Conversion Tools' },
   { name: 'Other Converters', desc: 'Color converter, Date-time converter, Markdown to HTML...', path: '/tools/conversion/other-converters', category: 'Conversion Tools' }
 ];
 
