@@ -114,7 +114,7 @@ export default function HeaderContent() {
         <DialogContent dividers>
           <Stack spacing={2}>
             <Typography variant="body1">
-              <strong>OpenSpace - KillerTools</strong> is a premium, client-side offline-first utility suite designed for developers, designers, and security professionals.
+              <strong>OpenSpace - KillerTools</strong> is a premium, open-source, client-side offline-first utility suite designed for developers, designers, and security professionals.
             </Typography>
             <Typography variant="body2" color="text.secondary">
               All tools run entirely within your local browser sandbox. No sensitive information, file data, or passwords are ever transmitted to external servers, ensuring complete privacy.
