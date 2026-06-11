@@ -27,8 +27,14 @@ import {
   DownloadOutlined,
   EyeOutlined,
   CodeOutlined,
-  FileMarkdownOutlined
+  FileMarkdownOutlined,
+  DownOutlined,
+  QuestionCircleOutlined
 } from '@ant-design/icons';
+
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 // project imports
 import MainCard from 'components/MainCard';
@@ -89,6 +95,80 @@ console.log(greet("World"));
 
 *Made with ❤️ by DTC Team*
 `;
+
+const SYNTAX_REFERENCE = [
+  {
+    section: 'Headings',
+    rows: [
+      { md: '# H1', html: '<h1>H1</h1>' },
+      { md: '## H2', html: '<h2>H2</h2>' },
+      { md: '### H3', html: '<h3>H3</h3>' },
+      { md: '#### H4', html: '<h4>H4</h4>' },
+      { md: '##### H5', html: '<h5>H5</h5>' },
+      { md: '###### H6', html: '<h6>H6</h6>' }
+    ]
+  },
+  {
+    section: 'Text Formatting',
+    rows: [
+      { md: '**bold**', html: '<strong>bold</strong>' },
+      { md: '*italic*', html: '<em>italic</em>' },
+      { md: '***bold+italic***', html: '<strong><em>bold+italic</em></strong>' },
+      { md: '~~strikethrough~~', html: '<del>strikethrough</del>' },
+      { md: '`inline code`', html: '<code>inline code</code>' },
+      { md: 'H~2~O (subscript)', html: 'H<sub>2</sub>O' },
+      { md: 'X^2^ (superscript)', html: 'X<sup>2</sup>' }
+    ]
+  },
+  {
+    section: 'Lists',
+    rows: [
+      { md: '- Unordered item', html: '<ul><li>Unordered item</li></ul>' },
+      { md: '1. Ordered item', html: '<ol><li>Ordered item</li></ol>' },
+      { md: '- [x] Task done', html: '<li><input checked="" disabled="" type="checkbox"> Task done</li>' },
+      { md: '- [ ] Task open', html: '<li><input disabled="" type="checkbox"> Task open</li>' }
+    ]
+  },
+  {
+    section: 'Links & Images',
+    rows: [
+      { md: '[Link](https://example.com)', html: '<a href="https://example.com">Link</a>' },
+      { md: '![Alt](image.png)', html: '<img src="image.png" alt="Alt">' },
+      { md: '<https://auto.link>', html: '<a href="https://auto.link">https://auto.link</a>' },
+      { md: '[Reference][1]\n\n[1]: https://ref.com', html: '<a href="https://ref.com">Reference</a>' }
+    ]
+  },
+  {
+    section: 'Code',
+    rows: [
+      { md: '```js\nconst x = 1;\n```', html: '<pre><code class="language-js">const x = 1;</code></pre>' },
+      { md: '```\nplain block\n```', html: '<pre><code>plain block</code></pre>' },
+      { md: '`inline code`', html: '<code>inline code</code>' }
+    ]
+  },
+  {
+    section: 'Tables',
+    rows: [
+      { md: '| A | B |\n|---|---|\n| 1 | 2 |', html: '<table><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></table>' }
+    ]
+  },
+  {
+    section: 'Blockquotes',
+    rows: [
+      { md: '> Quote', html: '<blockquote><p>Quote</p></blockquote>' },
+      { md: '> **Nested**\n> > Inner', html: '<blockquote><p><strong>Nested</strong></p><blockquote><p>Inner</p></blockquote></blockquote>' }
+    ]
+  },
+  {
+    section: 'Other',
+    rows: [
+      { md: '---', html: '<hr>' },
+      { md: '\\*escaped\\*', html: '*escaped*' },
+      { md: ':rocket:', html: ':rocket:' },
+      { md: '<!-- comment -->', html: '<!-- comment -->' }
+    ]
+  }
+];
 
 // ==============================|| MARKDOWN TO HTML ||============================== //
 
@@ -412,6 +492,107 @@ export default function MarkdownToHtml() {
           </Grid>
         )}
       </Grid>
+
+      {/* Markdown Syntax Reference */}
+      <Box sx={{ mt: 3 }}>
+        <Accordion
+          sx={{
+            bgcolor: 'transparent',
+            border: '1px solid',
+            borderColor: theme.palette.divider,
+            borderRadius: '12px !important',
+            boxShadow: 'none',
+            '&:before': { display: 'none' }
+          }}
+        >
+          <AccordionSummary expandIcon={<DownOutlined style={{ fontSize: 14 }} />}>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <QuestionCircleOutlined style={{ color: theme.palette.primary.main, fontSize: 18 }} />
+              <Typography variant="h6" fontWeight={600}>
+                Markdown Syntax Reference
+              </Typography>
+              <Chip label="GFM" size="small" color="primary" variant="outlined" sx={{ height: 20 }} />
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails sx={{ p: 0 }}>
+            <Box sx={{ p: 2, pt: 0 }}>
+              {SYNTAX_REFERENCE.map((group) => (
+                <Box key={group.section} sx={{ mt: 2 }}>
+                  <Typography variant="subtitle2" fontWeight={600} sx={{ mb: 1, color: theme.palette.primary.main }}>
+                    {group.section}
+                  </Typography>
+                  <Box
+                    sx={{
+                      borderRadius: 1.5,
+                      border: '1px solid',
+                      borderColor: theme.palette.divider,
+                      overflow: 'hidden'
+                    }}
+                  >
+                    {group.rows.map((row, i) => (
+                      <Box
+                        key={i}
+                        sx={{
+                          display: 'flex',
+                          borderBottom: i < group.rows.length - 1 ? '1px solid' : 'none',
+                          borderColor: theme.palette.divider,
+                          '&:last-child': { borderBottom: 'none' },
+                          '& > div': { p: 1.5, fontSize: '0.8rem' }
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            flex: 1,
+                            borderRight: '1px solid',
+                            borderColor: theme.palette.divider,
+                            bgcolor: theme.palette.mode === 'dark' ? 'grey.100' : 'grey.50',
+                            fontFamily: '"Courier New", monospace',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-all'
+                          }}
+                        >
+                          {row.md}
+                        </Box>
+                        <Box
+                          sx={{
+                            flex: 1,
+                            fontFamily: '"Courier New", monospace',
+                            color: theme.palette.success.main,
+                            wordBreak: 'break-all',
+                            borderRight: '1px solid',
+                            borderColor: theme.palette.divider
+                          }}
+                        >
+                          {row.html}
+                        </Box>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: 40,
+                            minWidth: 40
+                          }}
+                        >
+                          <Tooltip title="Copy markdown">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleCopy(row.md, 'Markdown syntax')}
+                              sx={{ p: 0.5 }}
+                            >
+                              <CopyOutlined style={{ fontSize: 13 }} />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
 
       {/* Snackbar */}
       <Snackbar

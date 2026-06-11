@@ -9,15 +9,15 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build --base=/OpenSpace-KillerTool/",
+    "build": "vite build",
     "build-stage": "env-cmd -f .env.qa vite build",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "knip": "knip",
-    "predeploy": "npm run build && cp ./dist/index.html ./dist/404.html",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build && touch ./dist/.nojekyll && cp ./dist/index.html ./dist/404.html",
+    "deploy": "gh-pages -d dist --nojekyll"
   },
   "dependencies": {
     "@ant-design/colors": "7.2.0",
