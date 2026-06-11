@@ -48,6 +48,37 @@ function computeTransform(cw, ch, imgW, imgH) {
 function c2i(t, cx, cy) { return { x: (cx - t.ox) / t.scale, y: (cy - t.oy) / t.scale }; }
 function i2c(t, ix, iy) { return { x: ix * t.scale + t.ox, y: iy * t.scale + t.oy }; }
 
+const FONT_OPTIONS = [
+  { value: 'sans-serif', label: 'Sans-serif' },
+  { value: 'serif', label: 'Serif' },
+  { value: 'Arial', label: 'Arial' },
+  { value: "'Times New Roman', serif", label: 'Times New Roman' },
+  { value: 'Poppins', label: 'Poppins' },
+  { value: 'Georgia', label: 'Georgia' },
+  { value: 'Verdana', label: 'Verdana' },
+  { value: "'Courier New', monospace", label: 'Courier New' },
+  { value: 'Impact', label: 'Impact' },
+  { value: "'Comic Sans MS', cursive", label: 'Comic Sans MS' },
+  { value: 'Tahoma', label: 'Tahoma' },
+  { value: "'Trebuchet MS'", label: 'Trebuchet MS' },
+  { value: "'Lucida Console', monospace", label: 'Lucida Console' },
+  { value: 'monospace', label: 'Monospace' },
+  { value: 'Rockybilly', label: 'Rockybilly' },
+  { value: 'Gondens', label: 'Gondens' },
+  { value: "'Symphonie Calligraphy'", label: 'Symphonie Calligraphy' },
+  { value: 'Moralana', label: 'Moralana' },
+  { value: 'Awesome', label: 'Awesome' },
+  { value: 'Milker', label: 'Milker' },
+  { value: "'Retro Floral'", label: 'Retro Floral' },
+  { value: 'Rostex', label: 'Rostex' },
+  { value: "'Grindy Brush'", label: 'Grindy Brush' },
+  { value: "'Higher Jump'", label: 'Higher Jump' },
+  { value: "'Casko Luxury Demo'", label: 'Casko Luxury Demo' },
+  { value: "'Dalton White'", label: 'Dalton White' },
+  { value: "'Greater Theory'", label: 'Greater Theory' },
+  { value: "'Californian Signature'", label: 'Californian Signature' }
+];
+
 export default function PhotoEditor() {
   const theme = useTheme();
   const canvasRef = useRef(null);
@@ -262,6 +293,15 @@ export default function PhotoEditor() {
     if (!baseImage) return;
     const ip = canvasToImage(e);
     const found = findElementAt(ip.x, ip.y);
+    if (activeTool === 'eraser') {
+      if (found) {
+        setElements((prev) => prev.filter((x) => x.id !== found));
+        if (selectedId === found) setSelectedId(null);
+        setSnackMsg('Element erased!');
+        setSnackOpen(true);
+      }
+      return;
+    }
     if (found) {
       setSelectedId(found);
       const el = elementsRef.current.find((x) => x.id === found);
@@ -277,7 +317,7 @@ export default function PhotoEditor() {
         setSelectedId(newEl.id);
       }
     }
-  }, [baseImage, canvasToImage, findElementAt, activeTool, brushColor, brushSize]);
+  }, [baseImage, canvasToImage, findElementAt, activeTool, brushColor, brushSize, selectedId]);
 
   const handleCanvasMouseMove = useCallback((e) => {
     if (activeTool === 'paint' && isDrawing.current) {
@@ -516,11 +556,21 @@ export default function PhotoEditor() {
                   }} dense>
                     <FormatPainterOutlined style={{ marginRight: 8 }} /> Paint
                   </MenuItem>
+                  <MenuItem onClick={() => {
+                    setAddMenuAnchor(null);
+                    if (!baseImage) return;
+                    setActiveTool('eraser');
+                    setSnackMsg('Eraser active — click any element on the canvas to remove it');
+                    setSnackOpen(true);
+                  }} dense>
+                    <DeleteOutlined style={{ marginRight: 8 }} /> Eraser
+                  </MenuItem>
                 </Menu>
                 <Chip
                   label={
                     activeTool === 'text' ? 'Text' :
-                    activeTool === 'overlay' ? 'Image' : 'Paint'
+                    activeTool === 'overlay' ? 'Image' :
+                    activeTool === 'paint' ? 'Paint' : 'Eraser'
                   }
                   size="small"
                   color="primary"
@@ -528,7 +578,8 @@ export default function PhotoEditor() {
                   icon={
                     activeTool === 'text' ? <FontSizeOutlined style={{ fontSize: 12 }} /> :
                     activeTool === 'overlay' ? <PictureOutlined style={{ fontSize: 12 }} /> :
-                    <FormatPainterOutlined style={{ fontSize: 12 }} />
+                    activeTool === 'paint' ? <FormatPainterOutlined style={{ fontSize: 12 }} /> :
+                    <DeleteOutlined style={{ fontSize: 12 }} />
                   }
                 />
               </Stack>
@@ -568,21 +619,11 @@ export default function PhotoEditor() {
                       setTextFont(e.target.value);
                       if (selectedEl?.type === 'text') updateSelectedElement({ fontFamily: e.target.value });
                     }}
+                    renderValue={(v) => <span style={{ fontFamily: v }}>{FONT_OPTIONS.find((f) => f.value === v)?.label || v}</span>}
                   >
-                    <MenuItem value="sans-serif">Sans-serif</MenuItem>
-                    <MenuItem value="serif">Serif</MenuItem>
-                    <MenuItem value="Arial">Arial</MenuItem>
-                    <MenuItem value="'Times New Roman', serif">Times New Roman</MenuItem>
-                    <MenuItem value="Poppins">Poppins</MenuItem>
-                    <MenuItem value="Georgia">Georgia</MenuItem>
-                    <MenuItem value="Verdana">Verdana</MenuItem>
-                    <MenuItem value="'Courier New', monospace">Courier New</MenuItem>
-                    <MenuItem value="Impact">Impact</MenuItem>
-                    <MenuItem value="'Comic Sans MS', cursive">Comic Sans MS</MenuItem>
-                    <MenuItem value="Tahoma">Tahoma</MenuItem>
-                    <MenuItem value="'Trebuchet MS'">Trebuchet MS</MenuItem>
-                    <MenuItem value="'Lucida Console', monospace">Lucida Console</MenuItem>
-                    <MenuItem value="monospace">Monospace</MenuItem>
+                    {FONT_OPTIONS.map((f) => (
+                      <MenuItem key={f.value} value={f.value} sx={{ fontFamily: f.value }}>{f.label}</MenuItem>
+                    ))}
                   </Select>
                   <ToggleButton
                     value="bold"
@@ -768,6 +809,25 @@ export default function PhotoEditor() {
                 </Stack>
               )}
 
+              {activeTool === 'eraser' && (
+                <Stack spacing={1.5} sx={{ textAlign: 'center', py: 2 }}>
+                  <DeleteOutlined style={{ fontSize: 36, color: theme.palette.error.main, display: 'block', margin: '0 auto 8px' }} />
+                  <Typography variant="subtitle2" fontWeight={600} color="error.main">Object Eraser</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Click on any element (text, overlay, or paint stroke) on the canvas to remove it.
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="error"
+                    onClick={() => setActiveTool('text')}
+                    sx={{ mt: 1 }}
+                  >
+                    Exit Eraser
+                  </Button>
+                </Stack>
+              )}
+
               <Divider />
 
               <Stack spacing={1}>
@@ -842,7 +902,7 @@ export default function PhotoEditor() {
                   borderColor: theme.palette.divider,
                   bgcolor: theme.palette.mode === 'dark' ? 'grey.100' : 'grey.50',
                   overflow: 'hidden',
-                  cursor: activeTool === 'paint' ? 'crosshair' : 'default',
+                  cursor: activeTool === 'paint' ? 'crosshair' : activeTool === 'eraser' ? 'not-allowed' : 'default',
                   position: 'relative'
                 }}
               >
@@ -959,21 +1019,11 @@ export default function PhotoEditor() {
                               size="small"
                               value={el.fontFamily || 'sans-serif'}
                               onChange={(e) => updateSelectedElement({ fontFamily: e.target.value })}
+                              renderValue={(v) => <span style={{ fontFamily: v }}>{FONT_OPTIONS.find((f) => f.value === v)?.label || v}</span>}
                             >
-                              <MenuItem value="sans-serif">Sans-serif</MenuItem>
-                              <MenuItem value="serif">Serif</MenuItem>
-                              <MenuItem value="Arial">Arial</MenuItem>
-                              <MenuItem value="'Times New Roman', serif">Times New Roman</MenuItem>
-                              <MenuItem value="Poppins">Poppins</MenuItem>
-                              <MenuItem value="Georgia">Georgia</MenuItem>
-                              <MenuItem value="Verdana">Verdana</MenuItem>
-                              <MenuItem value="'Courier New', monospace">Courier New</MenuItem>
-                              <MenuItem value="Impact">Impact</MenuItem>
-                              <MenuItem value="'Comic Sans MS', cursive">Comic Sans MS</MenuItem>
-                              <MenuItem value="Tahoma">Tahoma</MenuItem>
-                              <MenuItem value="'Trebuchet MS'">Trebuchet MS</MenuItem>
-                              <MenuItem value="'Lucida Console', monospace">Lucida Console</MenuItem>
-                              <MenuItem value="monospace">Monospace</MenuItem>
+                              {FONT_OPTIONS.map((f) => (
+                                <MenuItem key={f.value} value={f.value} sx={{ fontFamily: f.value }}>{f.label}</MenuItem>
+                              ))}
                             </Select>
                             <ToggleButton
                               value="bold"

@@ -21,7 +21,9 @@ import {
   DownloadOutlined,
   UploadOutlined,
   UndoOutlined,
-  SwapOutlined
+  SwapOutlined,
+  RotateLeftOutlined,
+  RotateRightOutlined
 } from '@ant-design/icons';
 
 import MainCard from 'components/MainCard';
@@ -55,6 +57,7 @@ export default function ImageResizer() {
   const [outputH, setOutputH] = useState(600);
   const [quality, setQuality] = useState(0.92);
   const [format, setFormat] = useState('png');
+  const [rotation, setRotation] = useState(0);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
 
@@ -186,14 +189,35 @@ export default function ImageResizer() {
     const sw = cr.w * scaleX;
     const sh = cr.h * scaleY;
 
+    const rot = rotation % 360;
+    const swap = rot === 90 || rot === 270;
+    const fw = swap ? outputH : outputW;
+    const fh = swap ? outputW : outputH;
+    const cw = swap ? outputW : outputW;
+    const ch = swap ? outputH : outputH;
+
     const canvas = canvasRef.current;
-    canvas.width = outputW;
-    canvas.height = outputH;
+    canvas.width = fw;
+    canvas.height = fh;
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(originalImg, sx, sy, sw, sh, 0, 0, outputW, outputH);
-  }, [originalImg, outputW, outputH]);
+
+    if (rot === 0) {
+      ctx.drawImage(originalImg, sx, sy, sw, sh, 0, 0, fw, fh);
+    } else {
+      const temp = document.createElement('canvas');
+      temp.width = cw;
+      temp.height = ch;
+      const tctx = temp.getContext('2d');
+      tctx.drawImage(originalImg, sx, sy, sw, sh, 0, 0, cw, ch);
+      ctx.save();
+      ctx.translate(fw / 2, fh / 2);
+      ctx.rotate(rot * Math.PI / 180);
+      ctx.drawImage(temp, -cw / 2, -ch / 2, cw, ch);
+      ctx.restore();
+    }
+  }, [originalImg, outputW, outputH, rotation]);
 
   useEffect(() => {
     renderOutput();
@@ -211,15 +235,37 @@ export default function ImageResizer() {
     const sw = cr.w * scaleX;
     const sh = cr.h * scaleY;
 
+    const rot = rotation % 360;
+    const swap = rot === 90 || rot === 270;
+    const fw = swap ? outputH : outputW;
+    const fh = swap ? outputW : outputH;
+    const cw = swap ? outputW : outputW;
+    const ch = swap ? outputH : outputH;
+
     const canvas = canvasRef.current;
-    canvas.width = outputW;
-    canvas.height = outputH;
+    canvas.width = fw;
+    canvas.height = fh;
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(originalImg, sx, sy, sw, sh, 0, 0, outputW, outputH);
+
+    if (rot === 0) {
+      ctx.drawImage(originalImg, sx, sy, sw, sh, 0, 0, fw, fh);
+    } else {
+      const temp = document.createElement('canvas');
+      temp.width = cw;
+      temp.height = ch;
+      const tctx = temp.getContext('2d');
+      tctx.drawImage(originalImg, sx, sy, sw, sh, 0, 0, cw, ch);
+      ctx.save();
+      ctx.translate(fw / 2, fh / 2);
+      ctx.rotate(rot * Math.PI / 180);
+      ctx.drawImage(temp, -cw / 2, -ch / 2, cw, ch);
+      ctx.restore();
+    }
+
     return canvas.toDataURL(`image/${format}`, quality);
-  }, [originalImg, outputW, outputH, format, quality]);
+  }, [originalImg, outputW, outputH, format, quality, rotation]);
 
   const handleDownload = useCallback(() => {
     const dataUrl = getOutputDataURL();
@@ -555,6 +601,66 @@ export default function ImageResizer() {
 
               <Divider />
 
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2" fontWeight={600}>Rotate</Typography>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    size="small"
+                    variant={rotation === 0 ? 'contained' : 'outlined'}
+                    onClick={() => setRotation(0)}
+                    sx={{ flex: 1 }}
+                  >
+                    0°
+                  </Button>
+                  <Button
+                    size="small"
+                    variant={rotation === 90 ? 'contained' : 'outlined'}
+                    onClick={() => setRotation(90)}
+                    sx={{ flex: 1 }}
+                  >
+                    90°
+                  </Button>
+                  <Button
+                    size="small"
+                    variant={rotation === 180 ? 'contained' : 'outlined'}
+                    onClick={() => setRotation(180)}
+                    sx={{ flex: 1 }}
+                  >
+                    180°
+                  </Button>
+                  <Button
+                    size="small"
+                    variant={rotation === 270 ? 'contained' : 'outlined'}
+                    onClick={() => setRotation(270)}
+                    sx={{ flex: 1 }}
+                  >
+                    270°
+                  </Button>
+                </Stack>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<RotateLeftOutlined />}
+                    onClick={() => setRotation((rotation - 90 + 360) % 360)}
+                    sx={{ flex: 1 }}
+                  >
+                    Left
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<RotateRightOutlined />}
+                    onClick={() => setRotation((rotation + 90) % 360)}
+                    sx={{ flex: 1 }}
+                  >
+                    Right
+                  </Button>
+                </Stack>
+              </Stack>
+
+              <Divider />
+
               <Stack spacing={1}>
                 <Typography variant="caption" color="text.secondary">
                   {originalImg
@@ -565,6 +671,7 @@ export default function ImageResizer() {
                   <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                     <Chip label={`${originalImg.naturalWidth}×${originalImg.naturalHeight}`} size="small" variant="outlined" />
                     <Chip label={`→ ${outputW}×${outputH}`} size="small" color="primary" variant="outlined" />
+                    {rotation !== 0 && <Chip label={`↻ ${rotation}°`} size="small" color="secondary" variant="outlined" />}
                   </Box>
                 )}
               </Stack>
