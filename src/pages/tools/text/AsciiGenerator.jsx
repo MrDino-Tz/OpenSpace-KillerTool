@@ -132,8 +132,22 @@ export default function AsciiGenerator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [fontSize, setFontSize] = useState(13);
+  const [artColor, setArtColor] = useState('#6366f1');
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+
+  const COLOR_PRESETS = [
+    '#6366f1', // indigo
+    '#22c55e', // green
+    '#f59e0b', // amber
+    '#ef4444', // red
+    '#06b6d4', // cyan
+    '#a855f7', // purple
+    '#f97316', // orange
+    '#ec4899', // pink
+    '#ffffff', // white
+    '#64748b', // slate
+  ];
 
   const generateAscii = useCallback(async () => {
     if (!text.trim()) {
@@ -289,6 +303,56 @@ export default function AsciiGenerator() {
 
               <Divider />
 
+              {/* Art Color */}
+              <Box>
+                <Typography variant="subtitle2" fontWeight="600" sx={{ mb: 1.5 }}>
+                  Art Color
+                </Typography>
+                <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                  {COLOR_PRESETS.map((c) => (
+                    <Box
+                      key={c}
+                      onClick={() => setArtColor(c)}
+                      sx={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: '50%',
+                        bgcolor: c,
+                        cursor: 'pointer',
+                        border: artColor === c ? '3px solid' : '2px solid transparent',
+                        borderColor: artColor === c ? theme.palette.primary.main : 'transparent',
+                        outline: artColor === c ? `2px solid ${theme.palette.primary.main}` : '2px solid transparent',
+                        outlineOffset: '2px',
+                        transition: 'transform 0.15s',
+                        '&:hover': { transform: 'scale(1.2)' }
+                      }}
+                    />
+                  ))}
+                </Stack>
+                <Stack direction="row" alignItems="center" gap={1}>
+                  <Typography variant="caption" color="text.secondary">Custom:</Typography>
+                  <input
+                    type="color"
+                    value={artColor}
+                    onChange={(e) => setArtColor(e.target.value)}
+                    style={{
+                      width: 36,
+                      height: 28,
+                      padding: 0,
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      background: 'none'
+                    }}
+                  />
+                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
+                    {artColor}
+                  </Typography>
+                </Stack>
+              </Box>
+
+              <Divider />
+
               {/* Action Buttons */}
               <Stack spacing={1.5}>
                 <Button
@@ -401,7 +465,7 @@ export default function AsciiGenerator() {
                     fontSize: `${fontSize}px`,
                     lineHeight: 1.3,
                     margin: 0,
-                    color: theme.palette.primary.main,
+                    color: artColor,
                     whiteSpace: 'pre',
                     tabSize: 4
                   }}
