@@ -42,7 +42,7 @@ const MainCard = forwardRef(function MainCard(
           position: 'relative',
           border: border ? '1px solid' : 'none',
           borderRadius: 1,
-          borderColor: 'grey.A800',
+          borderColor: 'divider',
           boxShadow: boxShadow && !border ? shadow || theme.customShadows.z1 : 'inherit',
           ':hover': {
             boxShadow: boxShadow ? shadow || theme.customShadows.z1 : 'inherit'

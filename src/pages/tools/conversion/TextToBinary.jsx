@@ -430,7 +430,7 @@ export default function TextToBinary() {
                 minHeight: 310,
                 p: 2,
                 borderRadius: 1.5,
-                bgcolor: theme.palette.mode === 'dark' ? 'grey.900' : 'grey.50',
+                bgcolor: theme.palette.mode === 'dark' ? 'grey.100' : 'grey.50',
                 border: '1px solid',
                 borderColor: theme.palette.divider,
                 overflowY: 'auto',

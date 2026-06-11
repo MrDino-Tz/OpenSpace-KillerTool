@@ -451,7 +451,7 @@ export default function AsciiGenerator() {
               <Box
                 sx={{
                   position: 'relative',
-                  bgcolor: theme.palette.mode === 'dark' ? 'grey.900' : 'grey.50',
+                  bgcolor: theme.palette.mode === 'dark' ? 'grey.100' : 'grey.50',
                   borderRadius: 2,
                   border: '1px solid',
                   borderColor: theme.palette.divider,

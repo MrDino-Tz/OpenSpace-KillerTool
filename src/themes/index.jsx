@@ -52,6 +52,112 @@ export default function ThemeCustomization({ children }) {
   const themes = createTheme(themeOptions);
   themes.components = componentsOverride(themes);
 
+  // Dark mode overrides for components that may not pick up palette changes automatically
+  if (mode === 'dark') {
+    themes.components = {
+      ...themes.components,
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            backgroundColor: themes.palette.background.default,
+            color: themes.palette.text.primary
+          }
+        }
+      },
+      MuiAppBar: {
+        ...(themes.components?.MuiAppBar || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiAppBar?.styleOverrides || {}),
+          root: {
+            ...(themes.components?.MuiAppBar?.styleOverrides?.root || {}),
+            backgroundColor: themes.palette.background.paper,
+            color: themes.palette.text.primary
+          }
+        }
+      },
+      MuiPaper: {
+        ...(themes.components?.MuiPaper || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiPaper?.styleOverrides || {}),
+          root: {
+            ...(themes.components?.MuiPaper?.styleOverrides?.root || {}),
+            backgroundImage: 'none'
+          }
+        }
+      },
+      MuiCard: {
+        ...(themes.components?.MuiCard || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiCard?.styleOverrides || {}),
+          root: {
+            ...(themes.components?.MuiCard?.styleOverrides?.root || {}),
+            backgroundColor: themes.palette.background.paper,
+            backgroundImage: 'none'
+          }
+        }
+      },
+      MuiOutlinedInput: {
+        ...(themes.components?.MuiOutlinedInput || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiOutlinedInput?.styleOverrides || {}),
+          root: {
+            ...(themes.components?.MuiOutlinedInput?.styleOverrides?.root || {}),
+            backgroundColor: 'transparent'
+          },
+          notchedOutline: {
+            ...(themes.components?.MuiOutlinedInput?.styleOverrides?.notchedOutline || {}),
+            borderColor: themes.palette.grey[300]
+          }
+        }
+      },
+      MuiDialog: {
+        ...(themes.components?.MuiDialog || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiDialog?.styleOverrides || {}),
+          paper: {
+            backgroundColor: themes.palette.background.paper,
+            backgroundImage: 'none'
+          }
+        }
+      },
+      MuiDrawer: {
+        ...(themes.components?.MuiDrawer || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiDrawer?.styleOverrides || {}),
+          paper: {
+            ...(themes.components?.MuiDrawer?.styleOverrides?.paper || {}),
+            backgroundColor: themes.palette.background.paper,
+            backgroundImage: 'none'
+          }
+        }
+      },
+      MuiListItemButton: {
+        ...(themes.components?.MuiListItemButton || {}),
+        styleOverrides: {
+          ...(themes.components?.MuiListItemButton?.styleOverrides || {}),
+          root: {
+            ...(themes.components?.MuiListItemButton?.styleOverrides?.root || {}),
+            '&:hover': {
+              backgroundColor: themes.palette.grey[200]
+            }
+          }
+        }
+      },
+      MuiTableHead: {
+        ...(themes.components?.MuiTableHead || {}),
+        styleOverrides: {
+          root: {
+            backgroundColor: themes.palette.grey[100],
+            borderTop: '1px solid',
+            borderTopColor: themes.palette.divider,
+            borderBottom: '2px solid',
+            borderBottomColor: themes.palette.divider
+          }
+        }
+      }
+    };
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes}>
@@ -63,3 +169,4 @@ export default function ThemeCustomization({ children }) {
 }
 
 ThemeCustomization.propTypes = { children: PropTypes.node };
+

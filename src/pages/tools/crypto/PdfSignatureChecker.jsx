@@ -166,7 +166,7 @@ export default function PdfSignatureChecker() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  bgcolor: theme.palette.mode === 'dark' ? 'grey.900' : 'grey.50',
+                  bgcolor: theme.palette.mode === 'dark' ? 'grey.100' : 'grey.50',
                   transition: 'background-color 0.2s',
                   '&:hover': { bgcolor: theme.palette.action.hover }
                 }}
