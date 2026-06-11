@@ -20,6 +20,9 @@ const TextToBinary = Loadable(lazy(() => import('pages/tools/conversion/TextToBi
 const MarkdownToHtml = Loadable(lazy(() => import('pages/tools/conversion/MarkdownToHtml')));
 const ColorConverter = Loadable(lazy(() => import('pages/tools/conversion/ColorConverter')));
 
+// render - media tools
+const ImageResizer = Loadable(lazy(() => import('pages/tools/media/ImageResizer')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -86,6 +89,15 @@ const MainRoutes = {
             {
               path: 'pdf-signature-checker',
               element: <PdfSignatureChecker />
+            }
+          ]
+        },
+        {
+          path: 'media',
+          children: [
+            {
+              path: 'image-resizer',
+              element: <ImageResizer />
             }
           ]
         }
