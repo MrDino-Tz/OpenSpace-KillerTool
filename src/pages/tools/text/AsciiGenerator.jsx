@@ -44,15 +44,8 @@ const FONTS = [
   'Slant',
   'Shadow',
   'Speed',
-  'Isometric1',
-  'Isometric2',
-  'Isometric3',
-  'Isometric4',
-  'Larry 3D',
-  'DOS Rebel',
   'Doom',
   'Ogre',
-  'Univers',
   'Colossal',
   'Roman',
   'Star Wars',
@@ -61,11 +54,47 @@ const FONTS = [
   'Digital',
   'Alligator',
   'Alligator2',
-  'Whimsy',
   'Lean',
   'Small',
   'Mini',
-  'Tiny'
+  'Isometric1',
+  'Isometric2',
+  'Isometric3',
+  'Isometric4',
+  'Larry 3D',
+  'Larry 3D 2',
+  'DOS Rebel',
+  'Epic',
+  'Chunky',
+  'Doh',
+  'Electronic',
+  'Elite',
+  'Fuzzy',
+  'Ghost',
+  'Gothic',
+  'Hollywood',
+  'Italic',
+  'Jacky',
+  'Keyboard',
+  'LCD',
+  'Letters',
+  'Linux',
+  'Modular',
+  'NScript',
+  'Puffy',
+  'Rammstein',
+  'Rebel',
+  'Script',
+  'Soft',
+  'Stick Letters',
+  'Stop',
+  'Thick',
+  'Train',
+  'Trek',
+  'Twisted',
+  'Univers',
+  'Varsity',
+  'Whimsy'
 ];
 
 const FONT_CDN_BASE = 'https://unpkg.com/figlet@1.8.0/fonts/';
@@ -77,7 +106,8 @@ function loadFont(fontName) {
     if (figlet.defaults.fonts && figlet.defaults.fonts[fontName]) {
       return resolve();
     }
-    const fontFile = fontName.replace(/ /g, '_');
+    // Font filenames use spaces (URL-encoded), not underscores
+    const fontFile = encodeURIComponent(fontName);
     fetch(`${FONT_CDN_BASE}${fontFile}.flf`)
       .then((res) => {
         if (!res.ok) throw new Error(`Font not found: ${fontName}`);
