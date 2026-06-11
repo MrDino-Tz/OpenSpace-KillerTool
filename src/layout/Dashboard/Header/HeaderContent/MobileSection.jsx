@@ -10,7 +10,6 @@ import Box from '@mui/material/Box';
 
 // project imports
 import Search from './Search';
-import Profile from './Profile';
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
 
@@ -90,7 +89,6 @@ export default function MobileSection() {
                 <AppBar color="inherit">
                   <Toolbar>
                     <Search />
-                    <Profile />
                   </Toolbar>
                 </AppBar>
               </ClickAwayListener>

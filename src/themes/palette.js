@@ -10,9 +10,21 @@ import ThemeOption from './theme';
 // ==============================|| DEFAULT THEME - PALETTE ||============================== //
 
 export default function Palette(mode, presetColor) {
-  const colors = presetPalettes;
+  const colors = mode === 'dark' ? presetDarkPalettes : presetPalettes;
 
-  let greyPrimary = [
+  let greyPrimary = mode === 'dark' ? [
+    '#1e1e1e', // 0: paper background
+    '#1e1e1e', // 50
+    '#2d2d2d', // 100
+    '#2d2d2d', // 200: divider
+    '#4a4a4a', // 300
+    '#7a7a7a', // 400: text.disabled
+    '#a0a0a0', // 500: text.secondary
+    '#c0c0c0', // 600
+    '#f5f5f5', // 700: text.primary
+    '#fafafa', // 800
+    '#ffffff'  // 900
+  ] : [
     '#ffffff',
     '#fafafa',
     '#f5f5f5',
@@ -25,8 +37,8 @@ export default function Palette(mode, presetColor) {
     '#141414',
     '#000000'
   ];
-  let greyAscent = ['#fafafa', '#bfbfbf', '#434343', '#1f1f1f'];
-  let greyConstant = ['#fafafb', '#e6ebf1'];
+  let greyAscent = mode === 'dark' ? ['#1e1e1e', '#c0c0c0', '#4a4a4a', '#1e1e1e'] : ['#fafafa', '#bfbfbf', '#434343', '#1f1f1f'];
+  let greyConstant = mode === 'dark' ? ['#1c1c1c', '#121212'] : ['#fafafb', '#e6ebf1'];
 
   colors.grey = [...greyPrimary, ...greyAscent, ...greyConstant];
 
