@@ -15,12 +15,10 @@ import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 const tools = [
   { name: 'ASCII Word Art Generator', desc: 'Create ASCII text banners', path: '/tools/text/ascii-generator', category: 'Text Tools' },
   { name: 'Emoji Picker', desc: 'Browse and copy emojis', path: '/tools/text/emoji-picker', category: 'Text Tools' },
-  { name: 'Encoders/Decoders', desc: 'Base64 file & string encoder/decoder', path: '/tools/conversion/encoders-decoders', category: 'Conversion Tools' },
-  { name: 'Code Converters', desc: 'JSON ↔ XML, YAML ↔ JSON, TOML ↔ YAML/JSON', path: '/tools/conversion/code-converters', category: 'Conversion Tools' },
-  { name: 'Math / Logic', desc: 'Integer base converter, Math evaluator, Percentage calculator', path: '/tools/conversion/math-logic', category: 'Conversion Tools' },
-  { name: 'Text & Case Converters', desc: 'Case converter, Text to ASCII binary...', path: '/tools/conversion/text-case-converters', category: 'Conversion Tools' },
   { name: 'Text to ASCII Binary', desc: 'Convert text to binary and binary to text', path: '/tools/conversion/text-to-binary', category: 'Conversion Tools' },
-  { name: 'Other Converters', desc: 'Color converter, Date-time converter, Markdown to HTML...', path: '/tools/conversion/other-converters', category: 'Conversion Tools' }
+  { name: 'Color Converter', desc: 'Convert colors between HEX, RGB, HSL, CMYK...', path: '/tools/conversion/color-converter', category: 'Conversion Tools' },
+  { name: 'Password Generator', desc: 'Generate secure random passwords', path: '/tools/crypto/password-generator', category: 'CryptOK' },
+  { name: 'Password Analyzer', desc: 'Check password strength & crack time', path: '/tools/crypto/password-analyzer', category: 'CryptOK' }
 ];
 
 export default function DashboardDefault() {
