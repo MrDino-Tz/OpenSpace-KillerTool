@@ -1,6 +1,6 @@
-import { ScissorOutlined } from '@ant-design/icons';
+import { ScissorOutlined, EditOutlined } from '@ant-design/icons';
 
-const icons = { ScissorOutlined };
+const icons = { ScissorOutlined, EditOutlined };
 
 const mediaTools = {
   id: 'group-media-tools',
@@ -13,6 +13,14 @@ const mediaTools = {
       type: 'item',
       url: '/tools/media/image-resizer',
       icon: icons.ScissorOutlined,
+      breadcrumbs: false
+    },
+    {
+      id: 'photo-editor',
+      title: 'Photo Editor',
+      type: 'item',
+      url: '/tools/media/photo-editor',
+      icon: icons.EditOutlined,
       breadcrumbs: false
     }
   ]

@@ -22,6 +22,7 @@ const ColorConverter = Loadable(lazy(() => import('pages/tools/conversion/ColorC
 
 // render - media tools
 const ImageResizer = Loadable(lazy(() => import('pages/tools/media/ImageResizer')));
+const PhotoEditor = Loadable(lazy(() => import('pages/tools/media/PhotoEditor')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -98,6 +99,10 @@ const MainRoutes = {
             {
               path: 'image-resizer',
               element: <ImageResizer />
+            },
+            {
+              path: 'photo-editor',
+              element: <PhotoEditor />
             }
           ]
         }
