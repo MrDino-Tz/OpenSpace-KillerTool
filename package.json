@@ -2,14 +2,14 @@
   "name": "openspace-killertools",
   "version": "1.0.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "https://MrDino-Tz.github.io/OpenSpace-KillerTool",
   "author": {
     "name": "DTC Team",
     "email": "dtc.teamtz@gmail.com"
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build --base=/OpenSpace-KillerTool/",
     "build-stage": "env-cmd -f .env.qa vite build",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",

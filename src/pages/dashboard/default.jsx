@@ -19,7 +19,7 @@ const tools = [
   { name: 'Color Converter', desc: 'Convert colors between HEX, RGB, HSL, CMYK...', path: '/tools/conversion/color-converter', category: 'Conversion Tools' },
   { name: 'Password Generator', desc: 'Generate secure random passwords', path: '/tools/crypto/password-generator', category: 'CryptOK' },
   { name: 'Password Analyzer', desc: 'Check password strength & crack time', path: '/tools/crypto/password-analyzer', category: 'CryptOK' },
-  { name: 'PDF Signature Checker', desc: 'Validate digital signatures in PDFs', path: '/tools/document/pdf-signature-checker', category: 'Document Tools' }
+  { name: 'PDF Signature Checker', desc: 'Validate digital signatures in PDFs', path: '/tools/crypto/pdf-signature-checker', category: 'CryptOK' }
 ];
 
 export default function DashboardDefault() {

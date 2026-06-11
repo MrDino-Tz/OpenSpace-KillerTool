@@ -1,8 +1,9 @@
-import { LockOutlined, KeyOutlined } from '@ant-design/icons';
+import { LockOutlined, KeyOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
 
 const icons = {
   LockOutlined,
-  KeyOutlined
+  KeyOutlined,
+  SafetyCertificateOutlined
 };
 
 const cryptoTools = {
@@ -24,6 +25,14 @@ const cryptoTools = {
       type: 'item',
       url: '/tools/crypto/password-analyzer',
       icon: icons.LockOutlined,
+      breadcrumbs: false
+    },
+    {
+      id: 'pdf-signature-checker',
+      title: 'PDF Signature Checker',
+      type: 'item',
+      url: '/tools/crypto/pdf-signature-checker',
+      icon: icons.SafetyCertificateOutlined,
       breadcrumbs: false
     }
   ]

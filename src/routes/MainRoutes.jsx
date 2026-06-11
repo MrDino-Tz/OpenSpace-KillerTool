@@ -10,9 +10,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')))
 // render - crypto tools
 const PasswordGenerator = Loadable(lazy(() => import('pages/tools/crypto/PasswordGenerator')));
 const PasswordAnalyzer = Loadable(lazy(() => import('pages/tools/crypto/PasswordAnalyzer')));
-
-// render - document tools
-const PdfSignatureChecker = Loadable(lazy(() => import('pages/tools/document/PdfSignatureChecker')));
+const PdfSignatureChecker = Loadable(lazy(() => import('pages/tools/crypto/PdfSignatureChecker')));
 
 // render - conversion tools
 const AsciiGenerator = Loadable(lazy(() => import('pages/tools/text/AsciiGenerator')));
@@ -84,12 +82,7 @@ const MainRoutes = {
             {
               path: 'password-analyzer',
               element: <PasswordAnalyzer />
-            }
-          ]
-        },
-        {
-          path: 'document',
-          children: [
+            },
             {
               path: 'pdf-signature-checker',
               element: <PdfSignatureChecker />
