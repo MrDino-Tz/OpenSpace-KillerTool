@@ -29,6 +29,46 @@ export default function HeaderContent() {
   const handleOpenAbout = () => setAboutOpen(true);
   const handleCloseAbout = () => setAboutOpen(false);
 
+  const handleToggleTheme = (event) => {
+    const isAppearanceTransition = document.startViewTransition
+      && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isAppearanceTransition) {
+      toggleTheme();
+      return;
+    }
+
+    const x = event.clientX;
+    const y = event.clientY;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      toggleTheme();
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`
+      ];
+      document.documentElement.animate(
+        {
+          clipPath: mode === 'light' ? clipPath : clipPath.reverse()
+        },
+        {
+          duration: 500,
+          easing: 'ease-in-out',
+          pseudoElement: mode === 'light'
+            ? '::view-transition-new(root)'
+            : '::view-transition-old(root)'
+        }
+      );
+    });
+  };
+
   return (
     <>
       {!downLG && <Search />}
@@ -49,7 +89,7 @@ export default function HeaderContent() {
       {/* Theme Toggler */}
       <IconButton
         color="secondary"
-        onClick={toggleTheme}
+        onClick={handleToggleTheme}
         title={mode === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
         sx={{ color: 'text.primary', bgcolor: mode === 'dark' ? 'grey.200' : 'grey.100', width: 38, height: 38, ml: 1.5 }}
       >

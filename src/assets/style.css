@@ -1,3 +1,19 @@
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* View transitions for theme wave animation */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+/* Fallback transitions */
+body, .MuiPaper-root, .MuiBox-root, .MuiAppBar-root {
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
