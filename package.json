@@ -43,6 +43,7 @@
     "framer-motion": "^10.18.0",
     "lodash-es": "4.17.21",
     "marked": "^18.0.5",
+    "node-forge": "^1.4.0",
     "qrcode.react": "^4.2.0",
     "random-words": "^2.0.1",
     "react": "18.3.1",

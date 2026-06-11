@@ -11,6 +11,9 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')))
 const PasswordGenerator = Loadable(lazy(() => import('pages/tools/crypto/PasswordGenerator')));
 const PasswordAnalyzer = Loadable(lazy(() => import('pages/tools/crypto/PasswordAnalyzer')));
 
+// render - document tools
+const PdfSignatureChecker = Loadable(lazy(() => import('pages/tools/document/PdfSignatureChecker')));
+
 // render - conversion tools
 const AsciiGenerator = Loadable(lazy(() => import('pages/tools/text/AsciiGenerator')));
 const EmojiPicker = Loadable(lazy(() => import('pages/tools/text/EmojiPicker')));
@@ -81,6 +84,15 @@ const MainRoutes = {
             {
               path: 'password-analyzer',
               element: <PasswordAnalyzer />
+            }
+          ]
+        },
+        {
+          path: 'document',
+          children: [
+            {
+              path: 'pdf-signature-checker',
+              element: <PdfSignatureChecker />
             }
           ]
         }
