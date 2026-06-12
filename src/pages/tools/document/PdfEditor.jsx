@@ -790,7 +790,7 @@ export default function PdfEditor() {
 
                           {/* Page delete button */}
                           <IconButton size="small" color="error" onClick={() => deletePage(page.index)}
-                            sx={{ position: 'absolute', top: 4, right: 4, bgcolor: 'rgba(255,255,255,0.7)', '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' }, zIndex: 20, opacity: 0.6, '&:hover': { opacity: 1 } }}
+                            sx={{ position: 'absolute', top: 4, right: 4, bgcolor: 'rgba(255,255,255,0.7)', '&:hover': { bgcolor: 'rgba(255,255,255,0.9)', opacity: 1 }, zIndex: 20, opacity: 0.6 }}
                           ><DeleteOutlined style={{ fontSize: 14 }} /></IconButton>
                         </Box>
                       </Box>
