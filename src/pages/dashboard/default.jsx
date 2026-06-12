@@ -11,16 +11,17 @@ import Chip from '@mui/material/Chip';
 
 // project imports
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import ALL_TOOLS from 'data/tools';
 
-const tools = [
-  { name: 'ASCII Word Art Generator', desc: 'Create ASCII text banners', path: '/tools/text/ascii-generator', category: 'Text Tools' },
-  { name: 'Emoji Picker', desc: 'Browse and copy emojis', path: '/tools/text/emoji-picker', category: 'Text Tools' },
-  { name: 'Text to ASCII Binary', desc: 'Convert text to binary and binary to text', path: '/tools/conversion/text-to-binary', category: 'Conversion Tools' },
-  { name: 'Color Converter', desc: 'Convert colors between HEX, RGB, HSL, CMYK...', path: '/tools/conversion/color-converter', category: 'Conversion Tools' },
-  { name: 'Password Generator', desc: 'Generate secure random passwords', path: '/tools/crypto/password-generator', category: 'CryptOK' },
-  { name: 'Password Analyzer', desc: 'Check password strength & crack time', path: '/tools/crypto/password-analyzer', category: 'CryptOK' },
-  { name: 'PDF Signature Checker', desc: 'Validate digital signatures in PDFs', path: '/tools/crypto/pdf-signature-checker', category: 'CryptOK' }
-];
+const categories = [...new Set(ALL_TOOLS.map((t) => t.category))];
+
+const CATEGORY_COLORS = {
+  'Text Tools': 'primary',
+  'Conversion Tools': 'secondary',
+  'CryptOK': 'success',
+  'Image/Video': 'info',
+  'Currency': 'warning'
+};
 
 export default function DashboardDefault() {
   const theme = useTheme();
@@ -40,13 +41,13 @@ export default function DashboardDefault() {
 
       {/* Stats row */}
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <AnalyticEcommerce title="Total Tools Available" count={tools.length.toString()} percentage={100} extra="Ready to use" />
+        <AnalyticEcommerce title="Total Tools Available" count={ALL_TOOLS.length.toString()} percentage={100} extra="Ready to use" />
       </Grid>
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <AnalyticEcommerce title="Client-Side Processing" count="100%" percentage={0} color="success" extra="Zero server lag" />
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 4 }}>
-        <AnalyticEcommerce title="Categories" count="2" percentage={0} extra="Text, Conversion" />
+        <AnalyticEcommerce title="Categories" count={categories.length.toString()} percentage={0} extra={categories.join(', ')} />
       </Grid>
 
       {/* Tools Grid */}
@@ -55,7 +56,7 @@ export default function DashboardDefault() {
           All Tools
         </Typography>
         <Grid container spacing={3}>
-          {tools.map((tool, index) => (
+          {ALL_TOOLS.map((tool, index) => (
             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={index}>
               <Card
                 component={Link}
@@ -85,11 +86,11 @@ export default function DashboardDefault() {
                     {tool.desc}
                   </Typography>
                   <Box>
-                    <Chip 
-                      label={tool.category} 
-                      size="small" 
-                      color={tool.category === 'Text Tools' ? 'primary' : 'secondary'} 
-                      variant="outlined" 
+                    <Chip
+                      label={tool.category}
+                      size="small"
+                      color={CATEGORY_COLORS[tool.category] || 'default'}
+                      variant="outlined"
                     />
                   </Box>
                 </CardContent>

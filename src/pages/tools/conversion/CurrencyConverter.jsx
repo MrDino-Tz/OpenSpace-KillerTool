@@ -234,7 +234,7 @@ export default function CurrencyConverter() {
               />
 
               {rate !== null && !loading && (
-                <Paper variant="outlined" sx={{ p: 1.5, textAlign: 'center', bgcolor: theme.palette.mode === 'dark' ? 'grey.800' : 'grey.50', borderRadius: 1.5 }}>
+                <Paper variant="outlined" sx={{ p: 1.5, textAlign: 'center', borderRadius: 1.5 }}>
                   <Typography variant="h6" fontWeight={700} sx={{ fontFamily: 'monospace', color: theme.palette.primary.main }}>
                     1 {fromCurr} = {formatCurrency(rate)} {toCurr}
                   </Typography>
@@ -272,7 +272,6 @@ export default function CurrencyConverter() {
                 sx={{
                   p: 3,
                   textAlign: 'center',
-                  bgcolor: theme.palette.mode === 'dark' ? 'grey.800' : 'grey.50',
                   borderRadius: 2
                 }}
               >
