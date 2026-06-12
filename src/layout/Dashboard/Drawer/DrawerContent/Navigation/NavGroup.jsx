@@ -17,7 +17,7 @@ export default function NavGroup({ item }) {
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const navCollapse = item.children?.map((menuItem) => {
     switch (menuItem.type) {
