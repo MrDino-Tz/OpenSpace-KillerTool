@@ -19,6 +19,7 @@ const EmojiPicker = Loadable(lazy(() => import('pages/tools/text/EmojiPicker')))
 const TextToBinary = Loadable(lazy(() => import('pages/tools/conversion/TextToBinary')));
 const MarkdownToHtml = Loadable(lazy(() => import('pages/tools/conversion/MarkdownToHtml')));
 const ColorConverter = Loadable(lazy(() => import('pages/tools/conversion/ColorConverter')));
+const CurrencyConverter = Loadable(lazy(() => import('pages/tools/conversion/CurrencyConverter')));
 
 // render - media tools
 const ImageResizer = Loadable(lazy(() => import('pages/tools/media/ImageResizer')));
@@ -73,6 +74,10 @@ const MainRoutes = {
             {
               path: 'color-converter',
               element: <ColorConverter />
+            },
+            {
+              path: 'currency-converter',
+              element: <CurrencyConverter />
             }
           ]
         },
