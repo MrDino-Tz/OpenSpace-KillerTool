@@ -25,6 +25,9 @@ const CurrencyConverter = Loadable(lazy(() => import('pages/tools/conversion/Cur
 const ImageResizer = Loadable(lazy(() => import('pages/tools/media/ImageResizer')));
 const PhotoEditor = Loadable(lazy(() => import('pages/tools/media/PhotoEditor')));
 
+// render - document tools
+const PdfEditor = Loadable(lazy(() => import('pages/tools/document/PdfEditor')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -108,6 +111,15 @@ const MainRoutes = {
             {
               path: 'photo-editor',
               element: <PhotoEditor />
+            }
+          ]
+        },
+        {
+          path: 'document',
+          children: [
+            {
+              path: 'pdf-editor',
+              element: <PdfEditor />
             }
           ]
         }

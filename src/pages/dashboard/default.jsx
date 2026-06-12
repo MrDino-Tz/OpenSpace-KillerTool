@@ -20,7 +20,8 @@ const CATEGORY_COLORS = {
   'Conversion Tools': 'secondary',
   'CryptOK': 'success',
   'Image/Video': 'info',
-  'Currency': 'warning'
+  'Currency': 'warning',
+  'OpenDoc': 'error'
 };
 
 export default function DashboardDefault() {

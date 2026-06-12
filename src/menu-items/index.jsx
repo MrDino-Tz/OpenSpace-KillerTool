@@ -5,11 +5,12 @@ import conversionTools from './conversionTools';
 import cryptoTools from './cryptoTools';
 import mediaTools from './mediaTools';
 import currencyTools from './currencyTools';
+import documentTools from './documentTools';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, textTools, conversionTools, cryptoTools, mediaTools, currencyTools]
+  items: [dashboard, textTools, conversionTools, cryptoTools, mediaTools, currencyTools, documentTools]
 };
 
 export default menuItems;

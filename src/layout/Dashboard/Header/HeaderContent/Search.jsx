@@ -1,10 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // material-ui
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -15,7 +12,12 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 // icons
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
@@ -27,11 +29,13 @@ import {
   SmileOutlined,
   NumberOutlined,
   FileTextOutlined,
+  FilePdfOutlined,
   LockOutlined,
   ScissorOutlined,
   EditOutlined,
   MoneyCollectOutlined
 } from '@ant-design/icons';
+import DownOutlined from '@ant-design/icons/DownOutlined';
 
 // shared data
 import ALL_TOOLS from 'data/tools';
@@ -41,6 +45,7 @@ const ICON_MAP = {
   SmileOutlined: <SmileOutlined />,
   NumberOutlined: <NumberOutlined />,
   FileTextOutlined: <FileTextOutlined />,
+  FilePdfOutlined: <FilePdfOutlined />,
   BgColorsOutlined: <BgColorsOutlined />,
   MoneyCollectOutlined: <MoneyCollectOutlined />,
   KeyOutlined: <KeyOutlined />,
@@ -50,11 +55,29 @@ const ICON_MAP = {
   EditOutlined: <EditOutlined />
 };
 
+const CATEGORY_ICONS = {
+  'Text Tools': <FontSizeOutlined />,
+  'Conversion Tools': <BgColorsOutlined />,
+  'CryptOK': <KeyOutlined />,
+  'Image/Video': <ScissorOutlined />,
+  'Currency': <MoneyCollectOutlined />,
+  'OpenDoc': <FilePdfOutlined />
+};
+
+function groupByCategory(tools) {
+  const map = {};
+  for (const tool of tools) {
+    if (!map[tool.category]) map[tool.category] = [];
+    map[tool.category].push(tool);
+  }
+  return map;
+}
+
 export default function Search() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [expanded, setExpanded] = useState({});
 
   const filteredTools = ALL_TOOLS.filter(
     (tool) =>
@@ -63,6 +86,18 @@ export default function Search() {
       tool.desc.toLowerCase().includes(query.toLowerCase()) ||
       tool.category.toLowerCase().includes(query.toLowerCase())
   );
+
+  const grouped = groupByCategory(filteredTools);
+
+  useEffect(() => {
+    if (query) {
+      const all = {};
+      Object.keys(grouped).forEach((cat) => { all[cat] = true; });
+      setExpanded(all);
+    } else {
+      setExpanded({});
+    }
+  }, [query]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -75,10 +110,6 @@ export default function Search() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -88,21 +119,8 @@ export default function Search() {
     handleClose();
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      setSelectedIndex((prev) => (prev + 1) % filteredTools.length);
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      setSelectedIndex((prev) => (prev - 1 + filteredTools.length) % filteredTools.length);
-    } else if (event.key === 'Enter') {
-      event.preventDefault();
-      if (filteredTools[selectedIndex]) {
-        handleSelect(filteredTools[selectedIndex].path);
-      }
-    } else if (event.key === 'Escape') {
-      handleClose();
-    }
+  const toggleCategory = (cat) => {
+    setExpanded((prev) => ({ ...prev, [cat]: !prev[cat] }));
   };
 
   return (
@@ -129,50 +147,77 @@ export default function Search() {
             Search Tools
           </Stack>
         </DialogTitle>
-        <DialogContent dividers onKeyDown={handleKeyDown}>
+        <DialogContent dividers>
           <Stack spacing={2}>
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Type to search tools... (arrows to navigate, Enter to open)"
+              placeholder="Search by name, description, or category..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
               size="small"
             />
             {filteredTools.length > 0 ? (
-              <Box sx={{ maxHeight: 320, overflowY: 'auto' }}>
-                {filteredTools.map((tool, index) => (
-                  <Box
-                    key={tool.path}
-                    onClick={() => handleSelect(tool.path)}
-                    onMouseEnter={() => setSelectedIndex(index)}
+              <Box sx={{ maxHeight: 360, overflowY: 'auto' }}>
+                {Object.entries(grouped).map(([cat, tools]) => (
+                  <Accordion
+                    key={cat}
+                    expanded={!!expanded[cat]}
+                    onChange={() => toggleCategory(cat)}
+                    elevation={0}
                     sx={{
-                      p: 1.5,
-                      borderRadius: 1,
-                      cursor: 'pointer',
-                      bgcolor: index === selectedIndex ? 'action.selected' : 'transparent',
-                      borderLeft: index === selectedIndex ? '3px solid' : '3px solid transparent',
-                      borderColor: index === selectedIndex ? 'primary.main' : 'transparent',
-                      transition: 'all 0.15s',
-                      '&:hover': { bgcolor: 'action.hover' }
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: '8px !important',
+                      mb: 1,
+                      '&:before': { display: 'none' }
                     }}
                   >
-                    <Stack direction="row" alignItems="center" gap={1.5}>
-                      <Box sx={{ color: index === selectedIndex ? 'primary.main' : 'text.secondary', fontSize: 18, display: 'flex' }}>
-                        {ICON_MAP[tool.icon] || <SearchOutlined />}
-                      </Box>
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography variant="body2" fontWeight={600} noWrap>
-                          {tool.name}
+                    <AccordionSummary
+                      expandIcon={<DownOutlined style={{ fontSize: 12 }} />}
+                      sx={{ minHeight: 40, '& .MuiAccordionSummary-content': { my: 0.5 } }}
+                    >
+                      <Stack direction="row" alignItems="center" gap={1}>
+                        <Box sx={{ color: 'text.secondary', fontSize: 16, display: 'flex' }}>
+                          {CATEGORY_ICONS[cat] || null}
+                        </Box>
+                        <Typography variant="subtitle2" fontWeight={700}>
+                          {cat}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary" noWrap>
-                          {tool.desc}
-                        </Typography>
-                      </Box>
-                      <Chip label={tool.category} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem', flexShrink: 0 }} />
-                    </Stack>
-                  </Box>
+                        <Chip label={tools.length} size="small" sx={{ height: 18, fontSize: '0.65rem' }} />
+                      </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ p: 0.5 }}>
+                      {tools.map((tool) => (
+                        <Box
+                          key={tool.path}
+                          onClick={() => handleSelect(tool.path)}
+                          sx={{
+                            p: 1.5,
+                            borderRadius: 1,
+                            cursor: 'pointer',
+                            transition: 'all 0.15s',
+                            '&:hover': { bgcolor: 'action.hover' }
+                          }}
+                        >
+                          <Stack direction="row" alignItems="center" gap={1.5}>
+                            <Box sx={{ color: 'text.secondary', fontSize: 16, display: 'flex' }}>
+                              {ICON_MAP[tool.icon] || <SearchOutlined />}
+                            </Box>
+                            <Box sx={{ flex: 1, minWidth: 0 }}>
+                              <Typography variant="body2" fontWeight={600} noWrap>
+                                {tool.name}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary" noWrap>
+                                {tool.desc}
+                              </Typography>
+                            </Box>
+                          </Stack>
+                        </Box>
+                      ))}
+                    </AccordionDetails>
+                  </Accordion>
                 ))}
               </Box>
             ) : (
