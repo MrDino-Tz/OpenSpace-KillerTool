@@ -27,17 +27,18 @@ import {
   FormatPainterOutlined,
   CloseOutlined,
   DragOutlined,
-  PlusOutlined
+  PlusOutlined,
+  BgColorsOutlined
 } from '@ant-design/icons';
 
 import MainCard from 'components/MainCard';
 
 let elemId = 0;
 function nextId() { return ++elemId; }
-let nameIdx = { text: 0, overlay: 0, paint: 0 };
+let nameIdx = { text: 0, overlay: 0, paint: 0, pixelEraser: 0 };
 function nextName(type) {
   nameIdx[type] += 1;
-  return { text: 'Text', overlay: 'Overlay', paint: 'Paint' }[type] + ' ' + nameIdx[type];
+  return { text: 'Text', overlay: 'Overlay', paint: 'Paint', pixelEraser: 'Eraser' }[type] + ' ' + nameIdx[type];
 }
 
 const TF = { ox: 0, oy: 0, scale: 1 };
@@ -102,6 +103,9 @@ export default function PhotoEditor() {
   const [textBold, setTextBold] = useState(false);
   const [brushColor, setBrushColor] = useState('#ff0000');
   const [brushSize, setBrushSize] = useState(6);
+  const [eraserSize, setEraserSize] = useState(20);
+  const [eraserColor, setEraserColor] = useState('');
+  const [sampledColor, setSampledColor] = useState(null);
   const [overlaySrc, setOverlaySrc] = useState(null);
 
   const [snackOpen, setSnackOpen] = useState(false);
@@ -129,8 +133,34 @@ export default function PhotoEditor() {
     ctx.clearRect(0, 0, cw, ch);
     ctx.drawImage(base, tf.ox, tf.oy, imgW * tf.scale, imgH * tf.scale);
 
+    // First pass: pixel eraser strokes (destination-out compositing unless color is set)
+    for (const el of elems) {
+      if (el.type !== 'pixelEraser' || el.points.length < 2) continue;
+      ctx.save();
+      if (el.color) {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = el.color;
+      } else {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
+      }
+      ctx.beginPath();
+      ctx.lineWidth = el.size * tf.scale;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      const first = i2c(tf, el.points[0].x, el.points[0].y);
+      ctx.moveTo(first.x, first.y);
+      for (let i = 1; i < el.points.length; i++) {
+        const pt = i2c(tf, el.points[i].x, el.points[i].y);
+        ctx.lineTo(pt.x, pt.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
     for (const el of elems) {
       ctx.save();
+      if (el.type === 'pixelEraser') { ctx.restore(); continue; }
       if (el.type === 'text') {
         const p = i2c(tf, el.x, el.y);
         const fontSizePx = el.fontSize * tf.scale;
@@ -308,24 +338,43 @@ export default function PhotoEditor() {
       if (el && el.type !== 'paint') {
         setDragState({ id: found, startIX: ip.x, startIY: ip.y, elX: el.x, elY: el.y });
       }
-    } else {
-      setSelectedId(null);
-      if (activeTool === 'paint') {
-        isDrawing.current = true;
-        const newEl = { id: nextId(), type: 'paint', color: brushColor, size: brushSize, points: [ip], name: nextName('paint') };
-        setElements((prev) => [...prev, newEl]);
-        setSelectedId(newEl.id);
+      } else {
+        setSelectedId(null);
+        if (activeTool === 'colorPicker') {
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const ctx = canvas.getContext('2d');
+          const pixel = ctx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+          const hex = '#' + [pixel[0], pixel[1], pixel[2]].map(v => v.toString(16).padStart(2, '0')).join('');
+          setSampledColor({ hex, r: pixel[0], g: pixel[1], b: pixel[2] });
+          setSnackMsg(`Sampled color: ${hex}`);
+          setSnackOpen(true);
+          return;
+        }
+        if (activeTool === 'paint') {
+          isDrawing.current = true;
+          const newEl = { id: nextId(), type: 'paint', color: brushColor, size: brushSize, points: [ip], name: nextName('paint') };
+          setElements((prev) => [...prev, newEl]);
+          setSelectedId(newEl.id);
+        } else if (activeTool === 'pixelEraser') {
+          isDrawing.current = true;
+          const newEl = { id: nextId(), type: 'pixelEraser', color: eraserColor || null, size: eraserSize, points: [ip], name: nextName('pixelEraser') };
+          setElements((prev) => [...prev, newEl]);
+          setSelectedId(newEl.id);
+        }
       }
-    }
-  }, [baseImage, canvasToImage, findElementAt, activeTool, brushColor, brushSize, selectedId]);
+  }, [baseImage, canvasToImage, findElementAt, activeTool, brushColor, brushSize, eraserColor, eraserSize, selectedId]);
 
   const handleCanvasMouseMove = useCallback((e) => {
-    if (activeTool === 'paint' && isDrawing.current) {
+    if ((activeTool === 'paint' || activeTool === 'pixelEraser') && isDrawing.current) {
       const ip = canvasToImage(e);
       setElements((prev) => {
         const updated = [...prev];
         const last = updated[updated.length - 1];
-        if (last && last.type === 'paint') {
+        if (last && (last.type === 'paint' || last.type === 'pixelEraser')) {
           updated[updated.length - 1] = { ...last, points: [...last.points, ip] };
         }
         return updated;
@@ -560,17 +609,37 @@ export default function PhotoEditor() {
                     setAddMenuAnchor(null);
                     if (!baseImage) return;
                     setActiveTool('eraser');
-                    setSnackMsg('Eraser active — click any element on the canvas to remove it');
+                    setSnackMsg('Delete Element active — click any element on the canvas to remove it');
                     setSnackOpen(true);
                   }} dense>
-                    <DeleteOutlined style={{ marginRight: 8 }} /> Eraser
+                    <DeleteOutlined style={{ marginRight: 8 }} /> Delete Element
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    setAddMenuAnchor(null);
+                    if (!baseImage) return;
+                    setActiveTool('pixelEraser');
+                    setSnackMsg('Pixel Eraser active — click & drag to erase parts of the image');
+                    setSnackOpen(true);
+                  }} dense>
+                    <DeleteOutlined style={{ marginRight: 8 }} /> Pixel Eraser
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    setAddMenuAnchor(null);
+                    if (!baseImage) return;
+                    setActiveTool('colorPicker');
+                    setSnackMsg('Color Picker active — click on the image to sample a color');
+                    setSnackOpen(true);
+                  }} dense>
+                    <BgColorsOutlined style={{ marginRight: 8 }} /> Color Picker
                   </MenuItem>
                 </Menu>
                 <Chip
                   label={
                     activeTool === 'text' ? 'Text' :
                     activeTool === 'overlay' ? 'Image' :
-                    activeTool === 'paint' ? 'Paint' : 'Eraser'
+                    activeTool === 'paint' ? 'Paint' :
+                    activeTool === 'pixelEraser' ? 'Pixel Eraser' :
+                    activeTool === 'colorPicker' ? 'Color Picker' : 'Delete Element'
                   }
                   size="small"
                   color="primary"
@@ -579,6 +648,8 @@ export default function PhotoEditor() {
                     activeTool === 'text' ? <FontSizeOutlined style={{ fontSize: 12 }} /> :
                     activeTool === 'overlay' ? <PictureOutlined style={{ fontSize: 12 }} /> :
                     activeTool === 'paint' ? <FormatPainterOutlined style={{ fontSize: 12 }} /> :
+                    activeTool === 'pixelEraser' ? <DeleteOutlined style={{ fontSize: 12 }} /> :
+                    activeTool === 'colorPicker' ? <BgColorsOutlined style={{ fontSize: 12 }} /> :
                     <DeleteOutlined style={{ fontSize: 12 }} />
                   }
                 />
@@ -809,6 +880,116 @@ export default function PhotoEditor() {
                 </Stack>
               )}
 
+              {activeTool === 'pixelEraser' && (
+                <Stack spacing={1.5}>
+                  <Typography variant="subtitle2" fontWeight={600}>Pixel Eraser</Typography>
+                  <Typography variant="caption" color="text.secondary" gutterBottom>
+                    Size: {eraserSize}px
+                  </Typography>
+                  <Stack direction="row" alignItems="center" spacing={1.5} sx={{ flexWrap: 'wrap', py: 0.5 }}>
+                    {[5, 10, 20, 40, 80].map((s) => (
+                      <Box
+                        key={s}
+                        onClick={() => setEraserSize(s)}
+                        sx={{
+                          width: Math.min(s + 16, 48),
+                          height: Math.min(s + 16, 48),
+                          borderRadius: '50%',
+                          border: '2px solid',
+                          borderColor: eraserSize === s ? theme.palette.primary.main : theme.palette.divider,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          bgcolor: theme.palette.mode === 'dark' ? 'grey.200' : 'grey.100',
+                          transition: 'all 0.15s',
+                          '&:hover': { borderColor: theme.palette.primary.light }
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: s,
+                            height: s,
+                            borderRadius: '50%',
+                            bgcolor: theme.palette.text.secondary,
+                            opacity: 0.6,
+                            pointerEvents: 'none'
+                          }}
+                        />
+                      </Box>
+                    ))}
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="caption" sx={{ flexShrink: 0 }}>Color</Typography>
+                    <input
+                      type="color"
+                      value={eraserColor || '#000000'}
+                      onChange={(e) => setEraserColor(e.target.value)}
+                      style={{ width: 36, height: 36, border: 'none', cursor: 'pointer', padding: 0, background: 'none' }}
+                    />
+                    <Button
+                      size="small"
+                      variant={eraserColor ? 'outlined' : 'contained'}
+                      color={eraserColor ? 'primary' : 'error'}
+                      onClick={() => setEraserColor(eraserColor ? '' : '#000000')}
+                      sx={{ minWidth: 60, fontSize: '0.7rem', textTransform: 'none' }}
+                    >
+                      {eraserColor ? 'Paint' : 'Erase'}
+                    </Button>
+                  </Stack>
+                  <Typography variant="caption" color="text.secondary">
+                    {eraserColor ? 'Click & drag to paint with the selected color.' : 'Click & drag to erase pixels.'}
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="error"
+                    onClick={() => setActiveTool('text')}
+                    sx={{ mt: 1 }}
+                  >
+                    Exit Eraser
+                  </Button>
+                </Stack>
+              )}
+
+              {activeTool === 'colorPicker' && (
+                <Stack spacing={1.5} sx={{ textAlign: 'center', py: 2 }}>
+                  <BgColorsOutlined style={{ fontSize: 36, color: theme.palette.primary.main, display: 'block', margin: '0 auto 8px' }} />
+                  <Typography variant="subtitle2" fontWeight={600}>Color Picker</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Click anywhere on the canvas to sample a pixel color.
+                  </Typography>
+                  {sampledColor && (
+                    <Paper variant="outlined" sx={{ p: 1.5, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <Box sx={{ width: 40, height: 40, borderRadius: 1, bgcolor: sampledColor.hex, flexShrink: 0, border: '1px solid', borderColor: theme.palette.divider }} />
+                      <Stack spacing={0} sx={{ flex: 1, textAlign: 'left' }}>
+                        <Typography variant="body2" fontWeight={700} sx={{ fontFamily: 'monospace' }}>{sampledColor.hex}</Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          RGB({sampledColor.r}, {sampledColor.g}, {sampledColor.b})
+                        </Typography>
+                      </Stack>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => { navigator.clipboard.writeText(sampledColor.hex); setSnackMsg('Copied!'); setSnackOpen(true); }}
+                        sx={{ minWidth: 56, fontSize: '0.7rem' }}
+                      >
+                        Copy
+                      </Button>
+                    </Paper>
+                  )}
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => setActiveTool('text')}
+                    sx={{ mt: 1 }}
+                  >
+                    Exit Color Picker
+                  </Button>
+                </Stack>
+              )}
+
               {activeTool === 'eraser' && (
                 <Stack spacing={1.5} sx={{ textAlign: 'center', py: 2 }}>
                   <DeleteOutlined style={{ fontSize: 36, color: theme.palette.error.main, display: 'block', margin: '0 auto 8px' }} />
@@ -902,7 +1083,7 @@ export default function PhotoEditor() {
                   borderColor: theme.palette.divider,
                   bgcolor: theme.palette.mode === 'dark' ? 'grey.100' : 'grey.50',
                   overflow: 'hidden',
-                  cursor: activeTool === 'paint' ? 'crosshair' : activeTool === 'eraser' ? 'not-allowed' : 'default',
+                  cursor: activeTool === 'paint' ? 'crosshair' : activeTool === 'eraser' ? 'not-allowed' : activeTool === 'pixelEraser' ? 'crosshair' : activeTool === 'colorPicker' ? 'crosshair' : 'default',
                   position: 'relative'
                 }}
               >
@@ -972,8 +1153,9 @@ export default function PhotoEditor() {
                         {el.type === 'text' && <FontSizeOutlined style={{ fontSize: 14 }} />}
                         {el.type === 'overlay' && <PictureOutlined style={{ fontSize: 14 }} />}
                         {el.type === 'paint' && <FormatPainterOutlined style={{ fontSize: 14 }} />}
+                        {el.type === 'pixelEraser' && <DeleteOutlined style={{ fontSize: 14 }} />}
                         <Typography variant="caption" sx={{ fontSize: '0.75rem' }}>
-                          {el.name || (el.type === 'text' ? `"${el.content.substring(0, 10)}"` : el.type === 'overlay' ? `${el.w}\u00d7${el.h}` : `stroke`)}
+                          {el.name || (el.type === 'text' ? `"${el.content.substring(0, 10)}"` : el.type === 'overlay' ? `${el.w}\u00d7${el.h}` : el.type === 'pixelEraser' ? `eraser` : `stroke`)}
                         </Typography>
                       </Stack>
                       <IconButton
@@ -1077,6 +1259,35 @@ export default function PhotoEditor() {
                             <TextField
                               size="small"
                               label="Brush Size"
+                              type="number"
+                              value={el.size}
+                              onChange={(e) => updateSelectedElement({ size: Math.max(1, Number(e.target.value) || 1) })}
+                            />
+                          </>
+                        )}
+                        {el.type === 'pixelEraser' && (
+                          <>
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                              <Typography variant="caption" sx={{ flexShrink: 0 }}>Color</Typography>
+                              <input
+                                type="color"
+                                value={el.color || '#000000'}
+                                onChange={(e) => updateSelectedElement({ color: e.target.value })}
+                                style={{ width: 32, height: 32, border: 'none', cursor: 'pointer', padding: 0, background: 'none' }}
+                              />
+                              <Button
+                                size="small"
+                                variant={el.color ? 'outlined' : 'contained'}
+                                color={el.color ? 'primary' : 'error'}
+                                onClick={() => updateSelectedElement({ color: el.color ? null : '#000000' })}
+                                sx={{ minWidth: 50, fontSize: '0.65rem', textTransform: 'none' }}
+                              >
+                                {el.color ? 'Paint' : 'Erase'}
+                              </Button>
+                            </Stack>
+                            <TextField
+                              size="small"
+                              label="Eraser Size"
                               type="number"
                               value={el.size}
                               onChange={(e) => updateSelectedElement({ size: Math.max(1, Number(e.target.value) || 1) })}
