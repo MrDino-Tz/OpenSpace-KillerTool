@@ -28,6 +28,9 @@ const PhotoEditor = Loadable(lazy(() => import('pages/tools/media/PhotoEditor'))
 // render - document tools
 const PdfEditor = Loadable(lazy(() => import('pages/tools/document/PdfEditor')));
 
+// render - dev gun
+const PigeonApi = Loadable(lazy(() => import('pages/tools/dev-gun/PigeonApi')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -120,6 +123,15 @@ const MainRoutes = {
             {
               path: 'pdf-editor',
               element: <PdfEditor />
+            }
+          ]
+        },
+        {
+          path: 'dev-gun',
+          children: [
+            {
+              path: 'pigeon-api',
+              element: <PigeonApi />
             }
           ]
         }

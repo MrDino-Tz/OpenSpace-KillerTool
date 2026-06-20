@@ -10,7 +10,8 @@ const ALL_TOOLS = [
   { name: 'PDF Signature Checker', desc: 'Validate digital signatures in PDFs', path: '/tools/crypto/pdf-signature-checker', category: 'CryptOK', icon: 'SafetyCertificateOutlined' },
   { name: 'Image Resizer', desc: 'Crop, resize, and rotate images', path: '/tools/media/image-resizer', category: 'Image/Video', icon: 'ScissorOutlined' },
   { name: 'Photo Editor', desc: 'Add text, overlays, paint, and erase on photos', path: '/tools/media/photo-editor', category: 'Image/Video', icon: 'EditOutlined' },
-  { name: 'PDF Editor', desc: 'Rotate, delete, and reorder pages in PDF files', path: '/tools/document/pdf-editor', category: 'OpenDoc', icon: 'FilePdfOutlined' }
+  { name: 'PDF Editor', desc: 'Rotate, delete, and reorder pages in PDF files', path: '/tools/document/pdf-editor', category: 'OpenDoc', icon: 'FilePdfOutlined' },
+  { name: 'Pigeon API', desc: 'Test HTTP APIs directly from the browser', path: '/tools/dev-gun/pigeon-api', category: 'Dev Gun', icon: 'ApiOutlined' }
 ];
 
 export default ALL_TOOLS;
