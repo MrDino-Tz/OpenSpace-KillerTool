@@ -13,6 +13,9 @@ import Chip from '@mui/material/Chip';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import ALL_TOOLS from 'data/tools';
 
+// assets
+import logo from 'assets/images/logo1.png';
+
 const categories = [...new Set(ALL_TOOLS.map((t) => t.category))];
 
 const CATEGORY_COLORS = {
@@ -30,13 +33,21 @@ export default function DashboardDefault() {
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
       <Grid size={12}>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="h3" fontWeight="bold" gutterBottom>
-            Welcome to OpenSpace-KillerTools
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Browser-based developer tools and utilities. Everything runs client-side in your browser. Fast, secure, and open-source.
-          </Typography>
+        <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box
+            component="img"
+            src={logo}
+            alt="OpenSpace KillerTools Logo"
+            sx={{ width: 60, height: 60, borderRadius: 2 }}
+          />
+          <Box>
+            <Typography variant="h3" fontWeight="bold" gutterBottom>
+              OpenSpace-KillerTool
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Browser-based developer tools and utilities. Everything runs client-side in your browser. Fast, secure, and open-source.
+            </Typography>
+          </Box>
         </Box>
       </Grid>
 
