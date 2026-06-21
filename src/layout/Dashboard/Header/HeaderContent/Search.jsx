@@ -33,7 +33,11 @@ import {
   LockOutlined,
   ScissorOutlined,
   EditOutlined,
-  MoneyCollectOutlined
+  MoneyCollectOutlined,
+  CodeOutlined,
+  ApiOutlined,
+  AuditOutlined,
+  QrcodeOutlined
 } from '@ant-design/icons';
 import DownOutlined from '@ant-design/icons/DownOutlined';
 
@@ -52,7 +56,11 @@ const ICON_MAP = {
   LockOutlined: <LockOutlined />,
   SafetyCertificateOutlined: <SafetyCertificateOutlined />,
   ScissorOutlined: <ScissorOutlined />,
-  EditOutlined: <EditOutlined />
+  EditOutlined: <EditOutlined />,
+  CodeOutlined: <CodeOutlined />,
+  ApiOutlined: <ApiOutlined />,
+  AuditOutlined: <AuditOutlined />,
+  QrcodeOutlined: <QrcodeOutlined />
 };
 
 const CATEGORY_ICONS = {

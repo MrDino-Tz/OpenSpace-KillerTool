@@ -20,16 +20,20 @@ const TextToBinary = Loadable(lazy(() => import('pages/tools/conversion/TextToBi
 const MarkdownToHtml = Loadable(lazy(() => import('pages/tools/conversion/MarkdownToHtml')));
 const ColorConverter = Loadable(lazy(() => import('pages/tools/conversion/ColorConverter')));
 const CurrencyConverter = Loadable(lazy(() => import('pages/tools/conversion/CurrencyConverter')));
+const CodeConverters = Loadable(lazy(() => import('pages/tools/conversion/CodeConverters')));
 
 // render - media tools
 const ImageResizer = Loadable(lazy(() => import('pages/tools/media/ImageResizer')));
 const PhotoEditor = Loadable(lazy(() => import('pages/tools/media/PhotoEditor')));
+const QRCodeGenerator = Loadable(lazy(() => import('pages/tools/media/QRCodeGenerator')));
 
 // render - document tools
 const PdfEditor = Loadable(lazy(() => import('pages/tools/document/PdfEditor')));
 
 // render - dev gun
 const PigeonApi = Loadable(lazy(() => import('pages/tools/dev-gun/PigeonApi')));
+const RegexTester = Loadable(lazy(() => import('pages/tools/dev-gun/RegexTester')));
+const FileMetaReader = Loadable(lazy(() => import('pages/tools/dev-gun/FileMetaReader')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -84,6 +88,10 @@ const MainRoutes = {
             {
               path: 'currency-converter',
               element: <CurrencyConverter />
+            },
+            {
+              path: 'code-converters',
+              element: <CodeConverters />
             }
           ]
         },
@@ -114,6 +122,10 @@ const MainRoutes = {
             {
               path: 'photo-editor',
               element: <PhotoEditor />
+            },
+            {
+              path: 'qr-code-generator',
+              element: <QRCodeGenerator />
             }
           ]
         },
@@ -132,6 +144,14 @@ const MainRoutes = {
             {
               path: 'pigeon-api',
               element: <PigeonApi />
+            },
+            {
+              path: 'regex-tester',
+              element: <RegexTester />
+            },
+            {
+              path: 'file-meta-reader',
+              element: <FileMetaReader />
             }
           ]
         }

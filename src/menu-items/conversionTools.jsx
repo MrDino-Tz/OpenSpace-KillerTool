@@ -39,6 +39,14 @@ const conversionTools = {
       url: '/tools/conversion/color-converter',
       icon: icons.BgColorsOutlined,
       breadcrumbs: false
+    },
+    {
+      id: 'code-converters',
+      title: 'Code converter',
+      type: 'item',
+      url: '/tools/conversion/code-converters',
+      icon: icons.CodeOutlined,
+      breadcrumbs: false
     }
   ]
 };
