@@ -53,13 +53,13 @@ export default function DashboardDefault() {
       </Grid>
 
       {/* Stats row */}
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid size={{ xs: 6, sm: 6, md: 6 }}>
         <AnalyticEcommerce title="Total Tools Available" count={ALL_TOOLS.length.toString()} percentage={100} extra="Ready to use" />
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid size={{ xs: 6, sm: 6, md: 6 }}>
         <AnalyticEcommerce title="Client-Side Processing" count="100%" percentage={0} color="success" extra="Zero server lag" />
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid size={12}>
         <SystemInfoCard />
       </Grid>
 
@@ -70,7 +70,7 @@ export default function DashboardDefault() {
         </Typography>
         <Grid container spacing={3}>
           {ALL_TOOLS.map((tool, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={index}>
+            <Grid size={{ xs: 6, sm: 6, md: 4, lg: 3 }} key={index}>
               <Card
                 component={Link}
                 to={tool.path}
