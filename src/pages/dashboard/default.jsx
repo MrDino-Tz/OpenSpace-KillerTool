@@ -11,6 +11,7 @@ import Chip from '@mui/material/Chip';
 
 // project imports
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import SystemInfoCard from 'components/cards/statistics/SystemInfoCard';
 import ALL_TOOLS from 'data/tools';
 
 // assets
@@ -58,8 +59,8 @@ export default function DashboardDefault() {
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <AnalyticEcommerce title="Client-Side Processing" count="100%" percentage={0} color="success" extra="Zero server lag" />
       </Grid>
-      <Grid size={{ xs: 12, sm: 12, md: 4 }}>
-        <AnalyticEcommerce title="Categories" count={categories.length.toString()} percentage={0} extra={categories.join(', ')} />
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <SystemInfoCard />
       </Grid>
 
       {/* Tools Grid */}

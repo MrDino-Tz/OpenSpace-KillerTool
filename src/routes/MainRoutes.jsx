@@ -43,10 +43,7 @@ const MainRoutes = {
   element: <DashboardLayout />,
   errorElement: <ErrorPage />,
   children: [
-    {
-      path: 'error-test',
-      element: <ErrorPage />
-    },
+
     {
       path: '/',
       element: <DashboardDefault />
