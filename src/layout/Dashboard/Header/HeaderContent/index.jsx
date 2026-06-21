@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
@@ -22,6 +23,7 @@ import { GithubOutlined, InfoCircleOutlined, MoonOutlined, SunOutlined } from '@
 // ==============================|| HEADER - CONTENT ||============================== //
 
 export default function HeaderContent() {
+  const navigate = useNavigate();
   const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { mode, toggleTheme } = useThemeMode();
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -132,6 +134,9 @@ export default function HeaderContent() {
           </Stack>
         </DialogContent>
         <DialogActions>
+          <Button onClick={() => { handleCloseAbout(); navigate('/error-test'); }} color="warning" variant="outlined">
+            Test Error Page
+          </Button>
           <Button onClick={handleCloseAbout} color="primary" variant="contained">
             Close
           </Button>
