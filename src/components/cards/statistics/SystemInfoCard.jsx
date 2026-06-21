@@ -177,7 +177,7 @@ export default function SystemInfoCard() {
           <Grid size={6}>
             <Typography variant="body2"><strong>Network:</strong></Typography>
             <Stack direction="row" alignItems="center" spacing={0.5}>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ color: arrowColor }}>
                 {downlink !== null ? `${downlink.toFixed(2)} Mbps` : 'Measuring...'}
               </Typography>
               <Typography variant="body2" sx={{ color: arrowColor, fontWeight: 700, lineHeight: 1, fontSize: '0.75rem' }}>
