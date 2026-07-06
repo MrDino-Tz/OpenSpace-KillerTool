@@ -7,11 +7,12 @@ import mediaTools from './mediaTools';
 import currencyTools from './currencyTools';
 import documentTools from './documentTools';
 import devGun from './devGun';
+import wifiShark from './wifiShark';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, textTools, conversionTools, cryptoTools, mediaTools, currencyTools, documentTools, devGun]
+  items: [dashboard, textTools, conversionTools, cryptoTools, mediaTools, currencyTools, documentTools, devGun, wifiShark]
 };
 
 export default menuItems;

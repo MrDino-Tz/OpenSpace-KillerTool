@@ -25,7 +25,9 @@ const CATEGORY_COLORS = {
   'CryptOK': 'success',
   'Image/Video': 'info',
   'Currency': 'warning',
-  'OpenDoc': 'error'
+  'OpenDoc': 'error',
+  'Dev Gun': 'primary',
+  'WiFi Shark': 'warning'
 };
 
 export default function DashboardDefault() {

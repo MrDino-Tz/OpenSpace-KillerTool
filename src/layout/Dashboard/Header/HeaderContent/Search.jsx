@@ -37,7 +37,8 @@ import {
   CodeOutlined,
   ApiOutlined,
   AuditOutlined,
-  QrcodeOutlined
+  QrcodeOutlined,
+  ScanOutlined
 } from '@ant-design/icons';
 import DownOutlined from '@ant-design/icons/DownOutlined';
 
@@ -60,7 +61,8 @@ const ICON_MAP = {
   CodeOutlined: <CodeOutlined />,
   ApiOutlined: <ApiOutlined />,
   AuditOutlined: <AuditOutlined />,
-  QrcodeOutlined: <QrcodeOutlined />
+  QrcodeOutlined: <QrcodeOutlined />,
+  ScanOutlined: <ScanOutlined />
 };
 
 const CATEGORY_ICONS = {
@@ -69,7 +71,9 @@ const CATEGORY_ICONS = {
   'CryptOK': <KeyOutlined />,
   'Image/Video': <ScissorOutlined />,
   'Currency': <MoneyCollectOutlined />,
-  'OpenDoc': <FilePdfOutlined />
+  'OpenDoc': <FilePdfOutlined />,
+  'Dev Gun': <ApiOutlined />,
+  'WiFi Shark': <ScanOutlined />
 };
 
 function groupByCategory(tools) {

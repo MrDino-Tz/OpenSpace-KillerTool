@@ -15,7 +15,8 @@ const ALL_TOOLS = [
   { name: 'PDF Editor', desc: 'Rotate, delete, and reorder pages in PDF files', path: '/tools/document/pdf-editor', category: 'OpenDoc', icon: 'FilePdfOutlined' },
   { name: 'Pigeon API', desc: 'Test HTTP APIs directly from the browser', path: '/tools/dev-gun/pigeon-api', category: 'Dev Gun', icon: 'ApiOutlined' },
   { name: 'Regex Tester', desc: 'Test regular expressions in real-time', path: '/tools/dev-gun/regex-tester', category: 'Dev Gun', icon: 'AuditOutlined' },
-  { name: 'File Meta Reader', desc: 'Read file metadata including EXIF data from images', path: '/tools/dev-gun/file-meta-reader', category: 'Dev Gun', icon: 'FileTextOutlined' }
+  { name: 'File Meta Reader', desc: 'Read file metadata including EXIF data from images', path: '/tools/dev-gun/file-meta-reader', category: 'Dev Gun', icon: 'FileTextOutlined' },
+  { name: 'WiFi QR Decoder', desc: 'Decode WiFi QR codes to reveal network name and password', path: '/tools/wifi-shark/qr-decoder', category: 'WiFi Shark', icon: 'ScanOutlined' }
 ];
 
 export default ALL_TOOLS;

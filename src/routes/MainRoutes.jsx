@@ -36,6 +36,9 @@ const PigeonApi = Loadable(lazy(() => import('pages/tools/dev-gun/PigeonApi')));
 const RegexTester = Loadable(lazy(() => import('pages/tools/dev-gun/RegexTester')));
 const FileMetaReader = Loadable(lazy(() => import('pages/tools/dev-gun/FileMetaReader')));
 
+// render - wifi shark
+const WifiQRDecoder = Loadable(lazy(() => import('pages/tools/wifi-shark/WifiQRDecoder')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -155,6 +158,15 @@ const MainRoutes = {
             {
               path: 'file-meta-reader',
               element: <FileMetaReader />
+            }
+          ]
+        },
+        {
+          path: 'wifi-shark',
+          children: [
+            {
+              path: 'qr-decoder',
+              element: <WifiQRDecoder />
             }
           ]
         }
