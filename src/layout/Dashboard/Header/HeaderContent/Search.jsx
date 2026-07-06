@@ -38,7 +38,10 @@ import {
   ApiOutlined,
   AuditOutlined,
   QrcodeOutlined,
-  ScanOutlined
+  ScanOutlined,
+  LaptopOutlined,
+  CalculatorOutlined,
+  LineChartOutlined
 } from '@ant-design/icons';
 import DownOutlined from '@ant-design/icons/DownOutlined';
 
@@ -62,7 +65,10 @@ const ICON_MAP = {
   ApiOutlined: <ApiOutlined />,
   AuditOutlined: <AuditOutlined />,
   QrcodeOutlined: <QrcodeOutlined />,
-  ScanOutlined: <ScanOutlined />
+  ScanOutlined: <ScanOutlined />,
+  LaptopOutlined: <LaptopOutlined />,
+  CalculatorOutlined: <CalculatorOutlined />,
+  LineChartOutlined: <LineChartOutlined />
 };
 
 const CATEGORY_ICONS = {

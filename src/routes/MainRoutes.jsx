@@ -38,6 +38,13 @@ const FileMetaReader = Loadable(lazy(() => import('pages/tools/dev-gun/FileMetaR
 
 // render - wifi shark
 const WifiQRDecoder = Loadable(lazy(() => import('pages/tools/wifi-shark/WifiQRDecoder')));
+const WifiQRGenerator = Loadable(lazy(() => import('pages/tools/wifi-shark/WifiQRGenerator')));
+const MacLookup = Loadable(lazy(() => import('pages/tools/wifi-shark/MacLookup')));
+const SubnetCalculator = Loadable(lazy(() => import('pages/tools/wifi-shark/SubnetCalculator')));
+const WifiPasswordGenerator = Loadable(lazy(() => import('pages/tools/wifi-shark/WifiPasswordGenerator')));
+const DefaultRouterPasswords = Loadable(lazy(() => import('pages/tools/wifi-shark/DefaultRouterPasswords')));
+const SpeedTestHistory = Loadable(lazy(() => import('pages/tools/wifi-shark/SpeedTestHistory')));
+const PortLookup = Loadable(lazy(() => import('pages/tools/wifi-shark/PortLookup')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -167,6 +174,34 @@ const MainRoutes = {
             {
               path: 'qr-decoder',
               element: <WifiQRDecoder />
+            },
+            {
+              path: 'qr-generator',
+              element: <WifiQRGenerator />
+            },
+            {
+              path: 'mac-lookup',
+              element: <MacLookup />
+            },
+            {
+              path: 'subnet-calculator',
+              element: <SubnetCalculator />
+            },
+            {
+              path: 'wifi-password-generator',
+              element: <WifiPasswordGenerator />
+            },
+            {
+              path: 'default-router-passwords',
+              element: <DefaultRouterPasswords />
+            },
+            {
+              path: 'speed-test-history',
+              element: <SpeedTestHistory />
+            },
+            {
+              path: 'port-lookup',
+              element: <PortLookup />
             }
           ]
         }

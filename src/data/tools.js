@@ -16,7 +16,14 @@ const ALL_TOOLS = [
   { name: 'Pigeon API', desc: 'Test HTTP APIs directly from the browser', path: '/tools/dev-gun/pigeon-api', category: 'Dev Gun', icon: 'ApiOutlined' },
   { name: 'Regex Tester', desc: 'Test regular expressions in real-time', path: '/tools/dev-gun/regex-tester', category: 'Dev Gun', icon: 'AuditOutlined' },
   { name: 'File Meta Reader', desc: 'Read file metadata including EXIF data from images', path: '/tools/dev-gun/file-meta-reader', category: 'Dev Gun', icon: 'FileTextOutlined' },
-  { name: 'WiFi QR Decoder', desc: 'Decode WiFi QR codes to reveal network name and password', path: '/tools/wifi-shark/qr-decoder', category: 'WiFi Shark', icon: 'ScanOutlined' }
+  { name: 'WiFi QR Decoder', desc: 'Decode WiFi QR codes to reveal network name and password', path: '/tools/wifi-shark/qr-decoder', category: 'WiFi Shark', icon: 'ScanOutlined' },
+  { name: 'WiFi QR Generator', desc: 'Generate QR codes from WiFi network details', path: '/tools/wifi-shark/qr-generator', category: 'WiFi Shark', icon: 'QrcodeOutlined' },
+  { name: 'MAC Address Lookup', desc: 'Find device manufacturer by MAC address', path: '/tools/wifi-shark/mac-lookup', category: 'WiFi Shark', icon: 'LaptopOutlined' },
+  { name: 'Subnet Calculator', desc: 'Calculate network range, broadcast, and hosts from CIDR', path: '/tools/wifi-shark/subnet-calculator', category: 'WiFi Shark', icon: 'CalculatorOutlined' },
+  { name: 'WiFi Password Generator', desc: 'Generate strong WPA2/WPA3-compatible passwords', path: '/tools/wifi-shark/wifi-password-generator', category: 'WiFi Shark', icon: 'KeyOutlined' },
+  { name: 'Default Router Passwords', desc: 'Browse default login credentials for router brands', path: '/tools/wifi-shark/default-router-passwords', category: 'WiFi Shark', icon: 'SafetyCertificateOutlined' },
+  { name: 'Speed Test History', desc: 'Track network speed test results over time', path: '/tools/wifi-shark/speed-test-history', category: 'WiFi Shark', icon: 'LineChartOutlined' },
+  { name: 'Port Number Lookup', desc: 'Search common port numbers and their services', path: '/tools/wifi-shark/port-lookup', category: 'WiFi Shark', icon: 'NumberOutlined' }
 ];
 
 export default ALL_TOOLS;
