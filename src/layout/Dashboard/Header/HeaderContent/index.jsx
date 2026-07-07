@@ -33,7 +33,6 @@ export default function HeaderContent() {
 
   useEffect(() => {
     let mounted = true;
-    if (!aboutOpen) return undefined;
     setStarLoading(true);
     fetch('https://api.github.com/repos/MrDino-Tz/OpenSpace-KillerTool')
       .then((res) => (res.ok ? res.json() : Promise.reject(res)))
@@ -52,7 +51,7 @@ export default function HeaderContent() {
     return () => {
       mounted = false;
     };
-  }, [aboutOpen]);
+  }, []);
 
   const handleToggleTheme = (event) => {
     const isAppearanceTransition = document.startViewTransition
@@ -110,6 +109,14 @@ export default function HeaderContent() {
       >
         <GithubOutlined style={{ fontSize: '18px' }} />
       </IconButton>
+
+      {/* Star count next to GitHub icon */}
+      <Box sx={{ display: 'flex', alignItems: 'center', ml: 0.5 }}>
+        <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, color: 'text.secondary', fontSize: 13 }}>
+          <StarOutlined style={{ fontSize: 14 }} />
+          {starLoading ? '…' : (starCount != null ? starCount : '—')}
+        </Box>
+      </Box>
 
       {/* Theme Toggler */}
       <IconButton
