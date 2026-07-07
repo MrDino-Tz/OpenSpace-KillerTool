@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
@@ -17,7 +17,7 @@ import MobileSection from './MobileSection';
 import { useThemeMode } from 'contexts/ThemeContext';
 
 // icons
-import { GithubOutlined, InfoCircleOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons';
+import { GithubOutlined, InfoCircleOutlined, MoonOutlined, SunOutlined, StarOutlined } from '@ant-design/icons';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -25,9 +25,34 @@ export default function HeaderContent() {
   const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { mode, toggleTheme } = useThemeMode();
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [starCount, setStarCount] = useState(null);
+  const [starLoading, setStarLoading] = useState(false);
 
   const handleOpenAbout = () => setAboutOpen(true);
   const handleCloseAbout = () => setAboutOpen(false);
+
+  useEffect(() => {
+    let mounted = true;
+    if (!aboutOpen) return undefined;
+    setStarLoading(true);
+    fetch('https://api.github.com/repos/MrDino-Tz/OpenSpace-KillerTool')
+      .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+      .then((data) => {
+        if (mounted && data && typeof data.stargazers_count === 'number') {
+          setStarCount(data.stargazers_count);
+        }
+      })
+      .catch(() => {
+        if (mounted) setStarCount(null);
+      })
+      .finally(() => {
+        if (mounted) setStarLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [aboutOpen]);
 
   const handleToggleTheme = (event) => {
     const isAppearanceTransition = document.startViewTransition
@@ -131,7 +156,21 @@ export default function HeaderContent() {
             </Typography>
           </Stack>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ gap: 1 }}>
+          <Button
+            component={Link}
+            href="https://github.com/MrDino-Tz/OpenSpace-KillerTool"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<GithubOutlined />}
+            variant="outlined"
+            color="inherit"
+          >
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+              <StarOutlined />
+              {starLoading ? '…' : (starCount != null ? starCount : 'Star')}
+            </Box>
+          </Button>
           <Button onClick={handleCloseAbout} color="primary" variant="contained">
             Close
           </Button>
